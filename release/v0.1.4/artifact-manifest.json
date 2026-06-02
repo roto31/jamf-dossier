@@ -1,1 +1,7 @@
-{"tag":"v0.1.4","dmg_sha256":"c9e152f9ba5b97b91d881d5ee67acda5cea274fd977c3a0d10d19092b354a580","ci_run":"https://github.com/roto31/Jamf-Settings-Analysis/actions/runs/26840985946"}
+{
+  "version": "0.1.4",
+  "tag": "v0.1.4",
+  "dmg": "Jamf Dossier-0.1.4-macos.dmg",
+  "sha256": "c9e152f9ba5b97b91d881d5ee67acda5cea274fd977c3a0d10d19092b354a580",
+  "public_repo": "roto31/jamf-dossier"
+}

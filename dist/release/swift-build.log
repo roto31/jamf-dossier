@@ -1,7 +1,6 @@
 Building for production...
-[0/6] Write sources
 [0/6] Copying endpoint_registry.json
-[2/6] Write sources
+[0/6] Write sources
 [3/6] Write swift-version--79AA4F9932D1E87A.txt
 [5/7] Compiling JamfBackupKit JamfConfiguration.swift
 /Users/runner/work/Jamf-Settings-Analysis/Jamf-Settings-Analysis/JamfBackup/Sources/JamfBackupKit/Export/DocumentationBuilder.swift:13:13: warning: variable 'summary' was never mutated; consider changing to 'let' constant
@@ -22,4 +21,4 @@ Building for production...
 [6/8] Compiling JamfBackupApp AppSettings.swift
 [6/8] Write Objects.LinkFileList
 [7/8] Linking JamfBackup
-Build of product 'JamfBackup' complete! (9.98s)
+Build of product 'JamfBackup' complete! (15.25s)

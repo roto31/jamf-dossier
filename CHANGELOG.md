@@ -5,6 +5,12 @@ All notable changes to this project are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
+## [0.1.5] - 2026-06-02
+
+### Changed
+
+- Fix Jamf Pro 11.x API paths for check-in, Self Service, inventory collection, and accounts; add version probe and ordered endpoint fallbacks.
+
 ## [0.1.4] - 2026-06-02
 
 ### Changed
