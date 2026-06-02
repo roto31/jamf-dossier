@@ -5,6 +5,12 @@ All notable changes to this project are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
+## [0.1.6] - 2026-06-02
+
+### Changed
+
+- Fix SSH password auth for MySQL/Tomcat backup via SSH_ASKPASS; clearer Jamf connectivity errors when API URL is unreachable.
+
 ## [0.1.5] - 2026-06-02
 
 ### Changed
