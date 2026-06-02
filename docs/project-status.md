@@ -18,7 +18,7 @@
 | Item | Status |
 |------|--------|
 | Release build/sign/notarize/DMG script | Done — [`scripts/release_build_macos_app.sh`](../scripts/release_build_macos_app.sh) |
-| SwiftPM resource bundle in release `.app` | Done — `JamfBackup_JamfBackupKit.bundle` → `Contents/Resources` (fixes launch crash) |
+| SwiftPM resource bundle in release `.app` | Done — `JamfBackup_JamfBackupKit.bundle` under **`Contents/Resources`** (codesign-safe); `EndpointRegistry.load()` falls back to `Bundle.main` subdirectory lookup because SPM `Bundle.module` expects the bundle beside the `.app` root. v0.1.3 supersedes withdrawn v0.1.2 (which used `Bundle.module` only and crashed on launch). |
 | Launch crash regression test | Done — [`scripts/verify_release_app_bundle.sh`](../scripts/verify_release_app_bundle.sh) + `ReleaseAppBundleTests.swift` in CI/release |
 | Tag `v0.1.2` pushed | Done — private artifact `jamf-dossier-macos-v0.1.2` (DMG in Actions artifacts) |
 | [`release.yml`](../.github/workflows/release.yml) artifacts + resource verify + publish gate | Done |
