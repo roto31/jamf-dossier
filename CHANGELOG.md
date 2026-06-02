@@ -5,6 +5,18 @@ All notable changes to this project are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
+
+## [0.2.0] - 2026-06-02
+
+### Added
+
+- **Code:** Bundle v2 DR backup platform — inventory collectors, AES-256-GCM secrets vault, package binary fetchers, restore dry-run engine, Swift DR UI/CLI parity.
+- **Data:** Endpoint registry expanded to 41 types (inventory, SSO, enrollment, patch titles, VPP, JCDS).
+
+### Changed
+
+- **Build/CI:** Fix pytest install via `[dev]` extra; sync root `endpoint_registry.json` in CI registry check.
+
 ## [0.1.6] - 2026-06-02
 
 ### Changed

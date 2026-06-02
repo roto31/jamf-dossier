@@ -1,6 +1,6 @@
 # Endpoint Verification
 
-This project exports **27 cataloged Jamf API object types** (see `JamfBackup/.../endpoint_registry.json` and `jamf_exporter/endpoint_registry.py`). It does **not** export every Jamf Pro Settings UI field or every API endpoint.
+This project exports **41 cataloged Jamf API object types** (see `JamfBackup/.../endpoint_registry.json` and `jamf_exporter/endpoint_registry.py`). It does **not** export every Jamf Pro Settings UI field or every API endpoint.
 
 Each export run records **`jamf_pro_version`** from `GET /api/v1/jamf-pro-version` in `manifest/run-metadata.json`.
 

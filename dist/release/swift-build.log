@@ -1,5 +1,4 @@
 Building for production...
-[0/6] Write sources
 [0/6] Copying endpoint_registry.json
 [1/6] Write sources
 [3/6] Write swift-version--79AA4F9932D1E87A.txt
@@ -30,4 +29,4 @@ Building for production...
 [6/8] Compiling JamfBackupApp AppSettings.swift
 [6/8] Write Objects.LinkFileList
 [7/8] Linking JamfBackup
-Build of product 'JamfBackup' complete! (13.45s)
+Build of product 'JamfBackup' complete! (12.25s)

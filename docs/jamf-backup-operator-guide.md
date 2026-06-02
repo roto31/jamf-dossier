@@ -9,7 +9,7 @@ Download the signed `.dmg` from the public GitHub Releases page and drag **Jamf 
 1. Open **Settings** and enter Jamf Pro URL.
 2. Save OAuth client credentials (or username/password) to Keychain.
 3. Choose a backup destination folder.
-4. Review **API Coverage** for the 27 exported object types and manual gaps.
+4. Review **API Coverage** for the 41 exported object types and manual gaps.
 
 ## On-premises database backup
 
@@ -17,7 +17,10 @@ Requires SSH to the Jamf Pro server, Server Tools **2.7.10+**, and SSH credentia
 
 1. Enter **SSH host**, **port** (usually 22), and **username** (`jamfadmin`).
 2. Click **Save SSH password to Keychain** (or **Import SSH private key**).
-3. Enable **Include MySQL backup** and/or **Include Tomcat configuration files**.
+3. Click **Save MySQL password to Keychain** (Jamf Pro database user from `DataBase.xml`, usually `jamfsoftware`). The app applies it to Server Tools via `jamf-pro config set` before `database test-connection`.
+4. Enable **Include MySQL backup** and/or **Include Tomcat configuration files**.
+
+Tomcat files are copied from `jamf-pro config list` **tomcat-dir** when set, otherwise `/usr/local/jss/tomcat`, `/opt/tomcat`, or `/Library/JSS/Tomcat`.
 
 If SSH works in Terminal but the app failed with `Permission denied (publickey,password)`, ensure the password was saved to Keychain after typing it, or use a key. Clear a bad imported key with **Clear SSH private key**.
 
