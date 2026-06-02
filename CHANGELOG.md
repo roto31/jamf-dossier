@@ -5,6 +5,12 @@ All notable changes to this project are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
+## [0.1.4] - 2026-06-02
+
+### Changed
+
+- Fixed: EndpointRegistry probes Bundle.main before Bundle.module so release .app no longer fatalErrors when the SPM resource bundle is under Contents/Resources (v0.1.3 still crashed on launch).
+
 ## [0.1.3] - 2026-06-02
 
 ### Changed
