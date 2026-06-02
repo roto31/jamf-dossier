@@ -1,0 +1,25 @@
+Building for production...
+[0/6] Write sources
+[0/6] Copying endpoint_registry.json
+[2/6] Write sources
+[3/6] Write swift-version--79AA4F9932D1E87A.txt
+[5/7] Compiling JamfBackupKit JamfConfiguration.swift
+/Users/runner/work/Jamf-Settings-Analysis/Jamf-Settings-Analysis/JamfBackup/Sources/JamfBackupKit/Export/DocumentationBuilder.swift:13:13: warning: variable 'summary' was never mutated; consider changing to 'let' constant
+ 11 |         try FileManager.default.createDirectory(at: docsDir, withIntermediateDirectories: true)
+ 12 | 
+ 13 |         var summary = """
+    |             `- warning: variable 'summary' was never mutated; consider changing to 'let' constant
+ 14 |         # \(spec.objectType)
+ 15 | 
+
+/Users/runner/work/Jamf-Settings-Analysis/Jamf-Settings-Analysis/JamfBackup/Sources/JamfBackupKit/Logging/AuditLogger.swift:17:13: warning: result of 'try?' is unused
+15 |             FileManager.default.createFile(atPath: logFileURL.path, contents: nil)
+16 |             self.fileHandle = try? FileHandle(forWritingTo: logFileURL)
+17 |             try? fileHandle?.seekToEnd()
+   |             `- warning: result of 'try?' is unused
+18 |         } else {
+19 |             self.fileHandle = nil
+[6/8] Compiling JamfBackupApp AppSettings.swift
+[6/8] Write Objects.LinkFileList
+[7/8] Linking JamfBackup
+Build of product 'JamfBackup' complete! (11.65s)
