@@ -1,99 +1,88 @@
-# Jamf Settings Analysis
+# Jamf Dossier
 
-Python toolkit for **full Jamf Pro environment documentation** and **structured configuration backup**.
+**Jamf Dossier** is a macOS application for full Jamf Pro environment documentation and structured configuration backup. It exports policies, groups, profiles, scripts, packages, prestages, LDAP, webhooks, and 40+ other object types — producing human-readable Markdown, raw JSON/XML backups, DR bundle manifests, checksums, cross-link reports, and gap analysis.
 
-Exports policies, groups, profiles, scripts, packages, prestages, LDAP, webhooks, and 20+ other object types via the Jamf Pro API and Classic API — producing Markdown documentation, raw JSON/XML backups, manifests with checksums, cross-link reports, and gap analysis.
+## Download
 
-## Quick Start
+Install from [GitHub Releases](https://github.com/roto31/jamf-dossier/releases):
 
-```bash
-python3 -m venv .venv && source .venv/bin/activate
-pip install -e .
-cp config/export.example.env config/export.env
-# Edit config/export.env with JAMF_URL and OAuth or Basic credentials
+1. Download `Jamf Dossier-<version>-macos.dmg`
+2. Open the DMG and drag **Jamf Dossier** to Applications
+3. Launch from Applications (macOS 15+)
 
-set -a && source config/export.env && set +a
-python scripts/run_full_export.py --output output
-```
+Verify the SHA-256 checksum in `release/<version>/checksums.sha256` before installing.
+
+> **Do not use `v0.1.1`** — that DMG crashes on launch. Use **v0.1.2 or newer**.
+
+## Quick start
+
+1. Open **Jamf Dossier** → **Settings**
+2. Enter your Jamf Pro URL and save API credentials to Keychain (OAuth client or username/password)
+3. Choose a backup destination folder
+4. Click **Run Backup**
+
+See the [Getting Started](https://github.com/roto31/jamf-dossier/wiki/Getting-Started) wiki page for the full walkthrough.
 
 ## Documentation
 
-Full project documentation lives in [`docs/`](docs/README.md) (Wiki-style navigation):
+| Resource | Link |
+|----------|------|
+| **GitHub Wiki** | [github.com/roto31/jamf-dossier/wiki](https://github.com/roto31/jamf-dossier/wiki) |
+| **Docs folder** | [docs/README.md](docs/README.md) |
+| **Operator guide** | [docs/jamf-dossier-operator-guide.md](docs/jamf-dossier-operator-guide.md) |
+| **DR overview** | [docs/dr/README.md](docs/dr/README.md) |
+| **Changelog** | [CHANGELOG.md](CHANGELOG.md) |
 
-| Section | Link |
-|---------|------|
-| **Wiki home** | [docs/README.md](docs/README.md) |
-| Project overview | [docs/project-overview.md](docs/project-overview.md) |
-| Architecture & diagrams | [docs/architecture.md](docs/architecture.md) |
-| Setup & installation | [docs/setup-installation.md](docs/setup-installation.md) |
-| Usage guide | [docs/usage-guide.md](docs/usage-guide.md) |
-| Troubleshooting | [docs/troubleshooting.md](docs/troubleshooting.md) |
-| CLI reference | [docs/scripts/run-full-export.md](docs/scripts/run-full-export.md) |
-| Package modules | [docs/scripts/jamf-exporter-package.md](docs/scripts/jamf-exporter-package.md) |
-| Output artifacts | [docs/output/index.md](docs/output/index.md) |
+## What gets backed up
+
+Each run writes a **DR Bundle v2.0** under your chosen folder:
+
+```
+backup-run/
+├── backup/              # Raw JSON/XML per object
+├── documentation/       # Markdown docs + crosslinks
+├── manifest/            # manifest.json, dr-manifest.json, run metadata
+├── gaps/                # API gaps and privilege notes
+├── logs/                # export.log, failures.json
+├── inventory/           # Device inventory (when enabled)
+├── binaries/            # Package .pkg files (when enabled)
+└── server/              # On-prem Tomcat/MySQL artifacts (when enabled)
+```
+
+See [Output Directory](https://github.com/roto31/jamf-dossier/wiki/Output-Directory) for complete artifact documentation.
+
+## Requirements
+
+| Requirement | Notes |
+|-------------|-------|
+| macOS | 15 or later |
+| Jamf Pro | Cloud or on-premises with HTTPS API access |
+| API credentials | OAuth client (preferred) or API user with Read privileges |
+| On-prem DR extras | SSH to Jamf server for package binaries and MySQL/Tomcat backup |
 
 ## Authentication
 
-Bearer tokens via:
+Jamf Dossier uses the same Jamf Pro API auth as the Jamf API:
 
 1. OAuth2 client credentials (`POST /api/v1/oauth/token`) — preferred
 2. Basic-to-token fallback (`POST /api/v1/auth/token`)
 
-Credentials are read from environment variables in `config/export.env` (never committed).
+Credentials are stored in the macOS Keychain, not in backup files.
 
-## CLI Flags
+## Proprietary software
 
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--output` | `output` | User-selected output root for backups, generated documentation, manifests, and logs |
-| `--stop-on-401` | off | Stop on first HTTP 401 (RBAC debugging) |
+Application source code is **not** published in this repository. This repo contains user documentation, release metadata, and signed release artifacts only.
 
-## Output Layout
+See [docs/legal/proprietary-notice.md](docs/legal/proprietary-notice.md).
 
-```
-output/
-├── documentation/     # Per-object Markdown + crosslinks
-├── backup/            # Raw JSON/XML by object type
-├── manifest/          # manifest.json, manifest.csv, run-metadata.json
-├── gaps/              # manual-workarounds.md
-└── logs/              # export.log
-```
-
-Legacy-compatibility mirrors are also written when the exporter runs:
-
-```
-output/
-├── docs/              # Aggregated legacy-style Markdown docs
-├── raw/               # Legacy-style raw export mirror
-├── manifests/         # Legacy manifest mirror
-├── gap-report.md      # Legacy gap report path
-└── logs/failures.json # Legacy failure report path
-```
-
-See [docs/output/index.md](docs/output/index.md) for complete artifact documentation.
-
-## Tests
-
-```bash
-pytest -q
-```
-
-## API References
+## API references
 
 - [Jamf Pro API Overview](https://developer.jamf.com/jamf-pro/docs/jamf-pro-api-overview)
 - [Classic API Overview](https://developer.jamf.com/jamf-pro/docs/getting-started-2)
 - [Endpoint citations](docs/api-endpoint-citations.md)
 
-## macOS App (Jamf Backup)
+## Support
 
-Native SwiftUI backup client in [`JamfBackup/`](JamfBackup/README.md):
-
-```bash
-cd JamfBackup && swift build && swift run JamfBackup
-```
-
-Open `JamfBackup/Package.swift` in Xcode 26 for GUI runs and code signing.
-
-## Related
-
-- [jamf_mcp/](jamf_mcp/docs/INSTALLATION.md) — MCP server subproject for Jamf API tooling
+1. [Troubleshooting wiki](https://github.com/roto31/jamf-dossier/wiki/Troubleshooting)
+2. Review `gaps/manual-workarounds.md` in your backup folder
+3. Open a GitHub issue on this repository

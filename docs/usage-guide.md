@@ -1,115 +1,86 @@
 # Usage Guide
 
-## Quick Start
+## Quick start
 
-```bash
-cd Jamf-Settings-Analysis
-source .venv/bin/activate
-set -a && source config/export.env && set +a
-python scripts/run_full_export.py --output output
-```
+1. Install from [Releases](https://github.com/roto31/jamf-dossier/releases)
+2. Configure Jamf URL and API credentials in **Settings**
+3. Choose backup folder → **Run Backup**
 
-## CLI Reference
+See [Getting Started](getting-started.md) for details.
 
-**Script:** `scripts/run_full_export.py`
+## Main window
 
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--output` | `output` | Root directory for all generated artifacts |
-| `--stop-on-401` | off | Stop export immediately on first HTTP 401 (useful for RBAC tuning) |
+| Control | Purpose |
+|---------|---------|
+| **Choose Folder…** | Set backup destination (security-scoped bookmark) |
+| **Reveal in Finder** | Open destination after export |
+| **Timestamped subfolder** | Each run under `YYYY-MM-DDTHHMMSSZ/` |
+| **Backup all** | Export all 41 registry types |
+| **Stop on first 401** | Fail fast on first permission error |
+| **Run Backup** | Start export after confirmation sheet |
 
-Source: `scripts/run_full_export.py` lines 11–14.
+## Settings
 
-## End-to-End Walkthrough
+| Setting | Effect |
+|---------|--------|
+| Jamf Pro URL | API base URL |
+| OAuth / Basic credentials | Stored in Keychain |
+| Verify TLS | Certificate validation |
+| Include inventory | Device JSON + FileVault CSV |
+| Include MySQL backup | On-prem Server Tools database dump |
+| Include Tomcat configuration | SSH copy of Tomcat files |
+| SSH host, port, user | On-prem server access |
 
-### Step 1 — Configure credentials
+## End-to-end walkthrough
 
-Edit `config/export.env` with your Jamf URL and OAuth or Basic credentials. See [Setup & Installation](setup-installation.md).
+### Step 1 — Configure
 
-### Step 2 — Run full export
+Settings → Jamf URL + credentials → Keychain. See [Setup](setup-installation.md).
 
-```bash
-python scripts/run_full_export.py --output output
-```
+### Step 2 — Select scope
 
-The orchestrator:
+- **Backup all** (default) or pick object types in the backup panel
+- Optional: **Stop on first 401** for RBAC debugging
 
-1. Loads config from environment
-2. Runs auth preflight (`get_token()`)
-3. Writes `output/manifest/run-metadata.json`
-4. Iterates all 27 endpoint specs in registry order
-5. For each type: list → detail → documentation + backup + manifest records
-6. Writes crosslinks, API citations, gap report
-7. Writes `output/manifest/manifest.json` and `manifest.csv`
-8. Logs to `output/logs/export.log` and stdout
+### Step 3 — Run backup
 
-### Step 3 — Review output
+Confirm destination and Jamf URL on the confirmation sheet. Progress appears in the UI; detailed log in `logs/export.log`.
+
+### Step 4 — Review output
 
 | Path | Purpose |
 |------|---------|
-| `output/documentation/` | Human-readable Markdown per object |
-| `output/backup/` | Raw JSON/XML payloads |
-| `output/manifest/manifest.json` | Full inventory with SHA-256 checksums |
-| `output/gaps/manual-workarounds.md` | API gaps and runtime errors |
-| `output/documentation/crosslinks.md` | Policy ↔ script/package relationships |
+| `documentation/` | Human-readable Markdown |
+| `backup/` | Raw JSON/XML |
+| `manifest/manifest.json` | Inventory + checksums |
+| `manifest/dr-manifest.json` | DR bundle metadata |
+| `gaps/manual-workarounds.md` | Gaps and errors |
+| `documentation/crosslinks.md` | Policy relationships |
 
-See [Output Directory Index](output/index.md) for full artifact documentation.
+[Output Directory Index](output/index.md)
 
-### Step 4 — Interpret exit code
+### Step 5 — Interpret results
 
-| Exit | Meaning |
-|------|---------|
-| `0` | All collectors succeeded |
-| `1` | One or more list/detail requests failed (check logs and gaps) |
-| `2` | Auth preflight failed — fix credentials or URL |
+| UI result | Meaning |
+|-----------|---------|
+| Success | All collectors succeeded |
+| Completed with errors | Some types failed — review gaps and log |
+| Failed to start | Auth or URL problem — check Settings |
 
-## RBAC Tuning with `--stop-on-401`
+## RBAC tuning
 
-When your API client lacks Read privileges on some endpoints, the default behavior is to log the 401, record the error, and continue to the next object type.
+Enable **Stop on first 401**, run backup, then check `manifest/run-metadata.json` → `missing_privileges_by_endpoint`. Grant Read in Jamf Pro API role and re-run.
 
-To fail fast and identify the first missing privilege:
+## Re-running backups
 
-```bash
-python scripts/run_full_export.py --output output --stop-on-401
-```
+Safe to re-run; files are overwritten per object ID. Use timestamped subfolders to keep history.
 
-On 401, the orchestrator:
+## Restore planning
 
-1. Records the error
-2. Adds the endpoint path to `missing_privileges_by_endpoint` in run metadata
-3. Breaks out of the collection loop
-4. Still writes manifest, gaps, and partial documentation for what was collected
-5. Prints a privilege summary to stdout
+Jamf Dossier produces DR bundles for planning. Live restore to another server requires lab procedures — see [DR Overview](dr/README.md). Do not restore to production without testing.
 
-Source: `jamf_exporter/orchestrator.py` lines 131–137, 149–156.
+## Related
 
-## Re-Running Exports
-
-- Safe to re-run; documentation builder clears stale per-object `.md` files before writing new ones
-- Backup files are overwritten per object ID
-- Manifest is regenerated each run
-- `output/` is gitignored — store exports outside the repo if you need version history
-
-## Legacy Export Path (Not Recommended)
-
-The older standalone script uses JSON config:
-
-```bash
-python src/jamf_audit_exporter.py \
-  --config config/jamf_config.example.json \
-  --catalog config/endpoint_catalog.json \
-  --output output \
-  --verbose
-```
-
-See [Legacy Tools](scripts/legacy-tools.md).
-
-## Safe Restore (Scaffolding Only)
-
-Non-dry-run restore requires `JAMF_ALLOW_RESTORE=true` and is not fully implemented in the production package:
-
-```bash
-python -m jamf_exporter.restore.safe_restore --manifest output/manifest/manifest.json --dry-run
-```
-
-See [Legacy Tools](scripts/legacy-tools.md) for the older `src/jamf_restore.py` dry-run/apply flow.
+- [Export Engine](export-engine.md)
+- [Operator Guide](jamf-dossier-operator-guide.md)
+- [Troubleshooting](troubleshooting.md)

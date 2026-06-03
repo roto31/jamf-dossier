@@ -20,18 +20,27 @@
 ## Quick start
 
 ```bash
-# Metadata + full DR tiers
-JAMF_URL=https://jamf.example.com JAMF_CLIENT_ID=... JAMF_CLIENT_SECRET=... \
-  python3 -m jamf_exporter.cli backup --output ./backup-run --full
+# Standard metadata export (CLI)
+set -a && source config/export.env && set +a
+python scripts/run_full_export.py --output ./backup-run
+
+# Full DR tiers (Python API — CLI flag not yet exposed)
+python -c "
+from pathlib import Path
+from jamf_exporter import run_full_export
+run_full_export(Path('./backup-run'), full_backup=True)
+"
 
 # Restore preview (no changes)
-python3 -c "
+python -c "
 from pathlib import Path
 from jamf_exporter.config import RuntimeConfig
 from jamf_exporter.restore.orchestrator import restore_from_bundle
 restore_from_bundle(Path('./backup-run'), 'https://lab.jamf.example.com', RuntimeConfig.from_env(), dry_run=True)
 "
 ```
+
+For on-prem package binaries, also set `JAMF_SSH_HOST`, `JAMF_SSH_USER`, and optionally `JAMF_SSH_IDENTITY_FILE` before running with `full_backup=True`.
 
 ## Further reading
 

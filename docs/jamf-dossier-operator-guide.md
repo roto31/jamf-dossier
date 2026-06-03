@@ -1,8 +1,8 @@
-# Jamf Backup operator guide
+# Jamf Dossier operator guide
 
 ## Install
 
-Download the signed `.dmg` from the public GitHub Releases page and drag **Jamf Dossier** to Applications.
+Download the signed `.dmg` from [GitHub Releases](https://github.com/roto31/jamf-dossier/releases) and drag **Jamf Dossier** to Applications.
 
 ## First run
 
@@ -10,6 +10,7 @@ Download the signed `.dmg` from the public GitHub Releases page and drag **Jamf 
 2. Save OAuth client credentials (or username/password) to Keychain.
 3. Choose a backup destination folder.
 4. Review **API Coverage** for the 41 exported object types and manual gaps.
+5. Review **DR Coverage** for tier availability on your deployment.
 
 ## On-premises database backup
 
@@ -26,7 +27,7 @@ If SSH works in Terminal but the app failed with `Permission denied (publickey,p
 
 ## Known release issues
 
-- **`v0.1.1` DMG** — mounts normally but the app **crashes on launch** (release `.app` omitted the SwiftPM resource bundle). Use **`v0.1.2` or newer** from [jamf-dossier Releases](https://github.com/roto31/jamf-dossier/releases).
+- **`v0.1.1` DMG** — mounts normally but the app **crashes on launch** (release `.app` omitted the SwiftPM resource bundle). Use **`v0.1.2` or newer**.
 
 ## Troubleshooting
 
@@ -34,7 +35,7 @@ If SSH works in Terminal but the app failed with `Permission denied (publickey,p
 |---------|--------|
 | **"Internet connection appears to be offline"** on backup | Misleading macOS message: the app could not reach **Jamf Pro HTTPS** (`/api/v1/auth/token`). Fix **Jamf URL** + **API** credentials (OAuth or username/password saved to Keychain). **SSH username/password do not authenticate the API.** |
 | App quits immediately after open (old DMG) | Install **v0.1.2+**; do not use `v0.1.1` build |
-| HTTP 401 | Grant API role; enable **Stop on first 401** to fail fast |
+| HTTP 401 | Grant API role Read privileges; enable **Stop on first 401** to fail fast |
 | TLS errors | Toggle **Verify TLS** off only for lab appliances with self-signed certs |
 | Empty summaries | Re-run after upgrade; policy/script XML summaries require valid detail responses |
 
@@ -47,3 +48,9 @@ curl -vk -u 'API_USER:API_PASSWORD' 'https://YOUR_JAMF_HOST/api/v1/jamf-pro-vers
 ```
 
 If `curl` fails, fix network/VPN/firewall or TLS before using Jamf Dossier. If `curl` works but the app does not, compare the exact URL and toggle **Verify TLS certificates**.
+
+## Related
+
+- [Getting Started](getting-started.md)
+- [DR Overview](dr/README.md)
+- [Troubleshooting](troubleshooting.md)

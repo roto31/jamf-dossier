@@ -1,140 +1,109 @@
 # Architecture
 
-## System Architecture
+## System architecture
 
 ```mermaid
 flowchart TB
-  subgraph cli [CLI Layer]
-    RunScript["scripts/run_full_export.py"]
-  end
-
-  subgraph orchestrator [Orchestration]
-    Orch["jamf_exporter.orchestrator.run_full_export"]
-  end
-
-  subgraph core [Core Modules]
-    Config["config.RuntimeConfig"]
-    Auth["auth.JamfTokenProvider"]
-    Client["http_client.JamfApiClient"]
-    Registry["endpoint_registry"]
-    Collector["collectors.generic"]
-    DocBuilder["documentation_builder"]
-    BackupWriter["backup_writer"]
-    Manifest["manifest"]
-    Gaps["gaps"]
-    Crosslinks["crosslinks"]
+  subgraph app [Jamf Dossier macOS App]
+    UI["SwiftUI Views"]
+    Settings["AppSettings + Keychain"]
+    VM["BackupViewModel"]
+    Orch["ExportOrchestrator"]
+    Registry["EndpointRegistry"]
   end
 
   subgraph external [External]
-    JamfPro["Jamf Pro Server"]
+    JamfPro["Jamf Pro HTTPS API"]
+    Keychain["macOS Keychain"]
+    SSH["Jamf Server SSH"]
   end
 
-  subgraph output [Output Artifacts]
-    Docs["output/documentation/"]
-    Backup["output/backup/"]
-    ManifestOut["output/manifest/"]
-    GapsOut["output/gaps/"]
-    Logs["output/logs/"]
+  subgraph output [Backup Folder]
+    Backup["backup/"]
+    Docs["documentation/"]
+    Manifest["manifest/"]
+    Gaps["gaps/"]
+    Logs["logs/"]
+    DR["inventory/, binaries/, server/"]
   end
 
-  RunScript --> Orch
-  Orch --> Config
-  Orch --> Auth
-  Orch --> Client
+  UI --> VM
+  VM --> Orch
+  Settings --> Keychain
+  Settings --> Orch
   Orch --> Registry
-  Registry --> Collector
-  Client --> JamfPro
-  Auth --> JamfPro
-  Collector --> DocBuilder
-  Collector --> BackupWriter
-  DocBuilder --> Docs
-  BackupWriter --> Backup
+  Orch --> JamfPro
+  Orch --> SSH
+  Orch --> Backup
+  Orch --> Docs
   Orch --> Manifest
   Orch --> Gaps
-  Orch --> Crosslinks
-  Manifest --> ManifestOut
-  Gaps --> GapsOut
   Orch --> Logs
+  Orch --> DR
 ```
 
-## Authentication Flow
+## Authentication flow
 
 ```mermaid
 flowchart TD
-  Start["run_full_export()"] --> LoadEnv["RuntimeConfig.from_env()"]
-  LoadEnv --> Preflight["token_provider.get_token()"]
-  Preflight --> OAuthCheck{"client_id AND client_secret set?"}
+  Start["Run Backup"] --> LoadKC["Load credentials from Keychain"]
+  LoadKC --> OAuthCheck{"OAuth client configured?"}
   OAuthCheck -->|Yes| OAuthReq["POST /api/v1/oauth/token"]
-  OAuthCheck -->|No| BasicCheck{"username AND password set?"}
-  OAuthReq --> OAuthOK{"status 200?"}
-  OAuthOK -->|No| OAuthBody["Retry with client_id/secret in form body"]
-  OAuthBody --> OAuthBodyOK{"status 200?"}
-  OAuthBodyOK -->|No| BasicCheck
-  OAuthOK -->|Yes| TokenReady["Bearer token cached"]
-  OAuthBodyOK -->|Yes| TokenReady
-  BasicCheck -->|Yes| BasicReq["POST /api/v1/auth/token"]
-  BasicCheck -->|No| AuthFail["AuthError exit code 2"]
-  BasicReq --> BasicOK{"status 200?"}
-  BasicOK -->|No| AuthFail
-  BasicOK -->|Yes| TokenReady
-  TokenReady --> CollectLoop["Iterate endpoint specs"]
+  OAuthCheck -->|No| BasicReq["POST /api/v1/auth/token"]
+  OAuthReq --> TokenReady["Bearer token"]
+  BasicReq --> TokenReady
+  TokenReady --> Probe["GET /api/v1/jamf-pro-version"]
+  Probe --> Loop["For each of 41 endpoint specs"]
 ```
 
-Source: `jamf_exporter/auth.py`, `jamf_exporter/orchestrator.py` lines 102–114.
-
-## Per-Object Collection Pipeline
+## Per-object collection
 
 ```mermaid
 flowchart LR
-  Spec["EndpointSpec"] --> ListReq["GET list_path"]
-  ListReq --> ParseIDs["Parse object IDs"]
-  ParseIDs --> DetailLoop["For each ID"]
-  DetailLoop --> DetailReq["GET detail_path"]
-  DetailReq --> ObjectDict["Object dict with id, name, payload"]
-  ObjectDict --> WriteDoc["write_object_documentation()"]
-  ObjectDict --> WriteBackup["write_backups()"]
-  WriteDoc --> MDFile["id__title.md"]
-  WriteBackup --> RawFile["id__title.json|xml"]
-  WriteBackup --> ExportRecord["ExportRecord → manifest"]
+  Spec["EndpointSpec"] --> List["GET list"]
+  List --> IDs["Parse IDs"]
+  IDs --> Detail["GET detail per ID"]
+  Detail --> Raw["Write backup/ + documentation/"]
+  Raw --> ManifestRow["manifest.json row + SHA-256"]
 ```
 
-Source: `jamf_exporter/collectors/generic.py`, `jamf_exporter/documentation_builder.py`, `jamf_exporter/backup_writer.py`.
-
-## HTTP Client Retry Logic
+## Optional DR tiers
 
 ```mermaid
 flowchart TD
-  Request["JamfApiClient.request()"] --> AttachToken["Attach Bearer token"]
-  AttachToken --> Send["session.request()"]
-  Send --> StatusCheck{"status == 401?"}
-  StatusCheck -->|Yes, attempt 1| RefreshToken["Clear token, re-fetch"]
-  RefreshToken --> Send
-  StatusCheck -->|No| SuccessCheck{"status < 500?"}
-  SuccessCheck -->|Yes| Return["Return response"]
-  SuccessCheck -->|No| RetryCheck{"attempts remaining?"}
-  StatusCheck -->|Yes, attempt > 1| RetryCheck
-  RetryCheck -->|Yes| Backoff["Sleep retry_backoff * attempt"]
-  Backoff --> Send
-  RetryCheck -->|No| Return
+  Meta["Metadata export complete"] --> Inv{"Include inventory?"}
+  Inv -->|Yes| InvAPI["computers-inventory, mobile-devices, FileVault"]
+  Inv --> SSH{"SSH configured?"}
+  SSH -->|Yes| MySQL["Server Tools MySQL backup"]
+  SSH -->|Yes| Tomcat["Tomcat config copy"]
+  SSH -->|Yes| PkgSCP["Package binaries via SCP"]
+  Inv -->|No| PkgCloud["Package binaries via JCDS API"]
+  InvAPI --> DRMan["dr-manifest.json tiers_completed"]
+  MySQL --> DRMan
+  PkgSCP --> DRMan
+  PkgCloud --> DRMan
 ```
 
-Source: `jamf_exporter/http_client.py`.
+## Data flow summary
 
-## Exit Codes
+| Stage | Input | Output |
+|-------|-------|--------|
+| Auth | Keychain credentials | Bearer token |
+| Collect | 41 API endpoints | `backup/`, `documentation/` |
+| Inventory | JPAPI device endpoints | `inventory/` |
+| Binaries | Package metadata + SSH or JCDS | `binaries/packages/` |
+| Finalize | All records + errors | `manifest/`, `gaps/`, `logs/` |
 
-| Code | Condition | Source |
-|------|-----------|--------|
-| `0` | Export completed with zero errors | `orchestrator.py` line 162 |
-| `1` | Export completed but one or more collector/API errors occurred | `orchestrator.py` line 162 |
-| `2` | Authentication preflight failed | `orchestrator.py` line 114 |
+## Repository vs application
 
-## Legacy vs Production Path
+| This repo | Shipped app |
+|-----------|-------------|
+| Documentation, CHANGELOG, release checksums | Signed `.app` in DMG |
+| `endpoint_registry.json` reference copy | Registry inside app bundle |
+| No Swift source | Proprietary binary |
 
-| Aspect | Production (`jamf_exporter/`) | Legacy (`src/`) |
-|--------|-------------------------------|-----------------|
-| Config | Environment variables | JSON config file |
-| Auth | OAuth + Basic fallback | Basic-to-token only |
-| Output layout | `output/documentation/`, `output/backup/` | `output/docs/`, `output/raw/` |
-| Catalog | `endpoint_registry.py` | `config/endpoint_catalog.json` |
+## Related
 
-The production path is invoked via `scripts/run_full_export.py`. Legacy scripts remain for reference but are not the recommended entrypoint.
+- [Export Engine](export-engine.md)
+- [Output Directory](output/index.md)
+- [DR Overview](dr/README.md)

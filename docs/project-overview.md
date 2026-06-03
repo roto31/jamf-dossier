@@ -2,70 +2,61 @@
 
 ## Purpose
 
-**Jamf Settings Analysis** is a Python toolkit that connects to a Jamf Pro instance, exports configuration objects via the Jamf Pro API and Classic API, and produces:
+**Jamf Dossier** is a macOS application that connects to Jamf Pro, exports configuration objects via the Jamf Pro API and Classic API, and produces:
 
-1. **Structured documentation** — Markdown files with extracted summaries and raw payloads
-2. **Structured backups** — JSON or XML files suitable for audit, diff, and migration planning
-3. **Operational metadata** — manifests, cross-link reports, gap analysis, and run logs
+1. **Structured documentation** — Markdown with extracted summaries and raw payloads
+2. **Structured backups** — JSON or XML for audit, diff, and disaster-recovery planning
+3. **Operational metadata** — manifests with SHA-256 checksums, cross-link reports, gap analysis, DR bundle metadata
 
-## Problem It Solves
+## Problem it solves
 
-Jamf Pro environments contain hundreds of interlinked objects (policies, groups, profiles, scripts, packages, prestages, LDAP, webhooks, etc.). Manual documentation is error-prone and quickly stale. This project automates:
+Jamf Pro environments contain hundreds of interlinked objects. Manual documentation is error-prone and quickly stale. Jamf Dossier automates:
 
-- Full object enumeration by type
-- Per-object export with checksums
-- Cross-reference mapping (e.g., which policies use which scripts/packages)
-- Identification of API gaps requiring manual UI capture
+- Export of **41** API object types
+- Per-object checksums and inventory manifests
+- Cross-reference mapping (policies ↔ scripts/packages)
+- Identification of settings that require manual UI capture
 
-## Tech Stack
+## Tech stack (shipped product)
 
 | Component | Technology |
 |-----------|------------|
-| Language | Python 3.10+ |
-| HTTP client | `requests` |
-| Packaging | setuptools (`pyproject.toml`) |
-| Testing | pytest |
-| Config | Environment variables (`config/export.env`) |
+| Application | Native Swift / SwiftUI (macOS 15+) |
+| HTTP | URLSession with Jamf Pro API |
+| Credentials | macOS Keychain |
+| Endpoint catalog | `endpoint_registry.json` in app bundle |
 | Output formats | JSON, XML, Markdown, CSV |
+| On-prem DR | SSH + Jamf Pro Server Tools |
 
-## Repository Layout
+Application source is proprietary. This repository publishes **documentation and release artifacts only**.
 
-```
-Jamf-Settings-Analysis/
-├── jamf_exporter/          # Primary production package
-├── scripts/
-│   └── run_full_export.py  # Main CLI
-├── src/                    # Legacy standalone scripts
-├── config/                 # Example env and endpoint catalog
-├── docs/                   # This documentation wiki
-├── tests/                  # Unit tests
-├── output/                 # Generated export artifacts (gitignored)
-└── jamf_mcp/               # Separate MCP server subproject
-```
+## Capabilities
 
-## Supported Jamf Object Types
+| Feature | Description |
+|---------|-------------|
+| Metadata export | Policies, groups, profiles, scripts, packages, LDAP, webhooks, prestages, etc. |
+| DR Bundle v2.0 | Standardized folder layout with `dr-manifest.json` |
+| Device inventory | Computers and mobile devices via Jamf Pro API |
+| Package binaries | Cloud JCDS or on-prem SCP from JSS cache |
+| On-prem server backup | MySQL via Server Tools, Tomcat configuration via SSH |
+| API coverage UI | In-app list of 41 endpoints and 2 manual gaps |
+| Restore preview | Dry-run restore planning (lab use; see DR docs) |
 
-The exporter iterates 27 endpoint specs defined in `jamf_exporter/endpoint_registry.py`:
+## Supported object types
 
-| Category | Object types |
-|----------|--------------|
-| Policies & payloads | `policies`, `scripts`, `packages`, `categories` |
-| Groups & profiles | `computer_groups`, `mobile_device_groups`, `computer_configuration_profiles`, `mobile_device_configuration_profiles` |
-| Apps | `mac_app_store_apps`, `mobile_device_apps`, `app_installers` |
-| Searches & EAs | `computer_extension_attributes`, `advanced_computer_searches`, `advanced_mobile_device_searches` |
-| Prestages | `computer_prestages`, `mobile_device_prestages` |
-| Settings | `inventory_collection_settings`, `check_in_settings`, `self_service_settings` |
-| Org structure | `network_segments`, `buildings`, `departments`, `sites` |
-| Accounts & integrations | `jamf_pro_user_accounts`, `jamf_pro_user_groups`, `webhooks`, `ldap_servers` |
+41 endpoint specs in the bundled registry. Categories include policies, scripts, packages, groups, profiles, prestages, settings, org structure, accounts, distribution points, inventory list endpoints, VPP, SSO settings, and JCDS (cloud).
 
-## Known API Gaps
+Full list: open **API Coverage** in the app or see [API Endpoint Citations](api-endpoint-citations.md).
 
-Some object types cannot be fully exported via public API endpoints. These are documented in:
+## Known API gaps
 
-- `jamf_exporter/endpoint_registry.py` → `get_manual_gaps()`
-- `output/gaps/manual-workarounds.md` (generated at runtime)
-- [manual-sso.md](manual-sso.md), [manual-ldap.md](manual-ldap.md), [manual-self-service.md](manual-self-service.md)
+| Object type | Limitation |
+|-------------|------------|
+| `sso_configuration` | No stable public API for complete SSO provider config |
+| `api_integrations_secrets` | Shared secrets not retrievable in clear text |
+
+Documented in backup `gaps/manual-workarounds.md` and [manual-sso.md](manual-sso.md).
 
 ## Version
 
-Exporter version is recorded in `output/manifest/run-metadata.json` as `exporter_version` (currently `0.1.0` per `jamf_exporter/orchestrator.py`).
+Current release version is in [CHANGELOG.md](../CHANGELOG.md) and GitHub Releases. Each backup records `exporter_version` in `manifest/run-metadata.json`.

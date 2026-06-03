@@ -1,159 +1,71 @@
 # Troubleshooting
 
-All items below are verified against source code and observed runtime behavior.
+Verified against Jamf Dossier release behavior and backup output layout.
 
-## Authentication Failures (Exit Code 2)
+## Authentication failures
 
 ### Symptom
 
-```
-Authentication preflight failed: ...
-Export aborted before collection.
-```
+Backup fails immediately; `logs/export.log` shows authentication error; few or no objects collected.
 
-Exit code `2`. No objects collected.
-
-### Causes & Fixes
+### Fixes
 
 | Cause | Fix |
 |-------|-----|
-| Wrong `JAMF_URL` | Use exact Jamf Pro URL including port for on-prem (e.g. `https://host:8443`) |
-| Placeholder credentials in `export.env` | Replace `YOUR_CLIENT_ID` etc. with real values |
-| OAuth client disabled or wrong secret | Regenerate secret in Jamf Pro → API Roles and Clients |
-| CloudFront 403 HTML response | Usually wrong URL or edge blocking; auth module detects HTML bodies and suggests URL check |
-| No credentials at all | Set OAuth (`JAMF_CLIENT_ID` + `JAMF_CLIENT_SECRET`) or Basic (`JAMF_USERNAME` + `JAMF_PASSWORD`) |
-
-Source: `jamf_exporter/auth.py`, `jamf_exporter/config.py` (`_reject_placeholders`).
-
-## SSL Certificate Verify Failed
-
-### Symptom
-
-```
-SSLError: certificate verify failed
-```
-
-### Fix
-
-For self-signed on-prem certificates:
+| Wrong Jamf URL | Use base URL with port for on-prem (`:8443`) |
+| Missing credentials | Save OAuth or Basic credentials in Settings → Keychain |
+| Invalid OAuth secret | Regenerate in Jamf Pro → API Roles and Clients |
+| **Offline** error message | Usually unreachable Jamf HTTPS — not macOS internet; fix URL/VPN/firewall/TLS |
 
 ```bash
-JAMF_VERIFY_TLS="false"
+curl -vk -u 'USER:PASS' 'https://YOUR_HOST/api/v1/jamf-pro-version'
 ```
 
-in `config/export.env`. Reload env before running.
+## SSL certificate errors
 
-## HTTP 401 on Specific Endpoints (Exit Code 1)
+Toggle **Verify TLS certificates** off in Settings only for lab appliances with self-signed certs.
 
-### Symptom
+## HTTP 401 on specific types
 
-```
-List request failed with status 401
-```
+Some types export; others fail.
 
-Some object types export; others fail. Exit code `1`.
+1. Jamf Pro → API role → grant **Read** for failing resource
+2. Enable **Stop on first 401** to find first failure
+3. Check `manifest/run-metadata.json` → `missing_privileges_by_endpoint`
 
-### Cause
+## App crashes on launch
 
-API client or user lacks **Read** privilege for that Jamf object class.
+Install **v0.1.2 or newer**. `v0.1.1` DMG is broken (missing resource bundle).
 
-### Fix
+## Empty object type
 
-1. In Jamf Pro: **Settings → System Settings → API Roles and Clients**
-2. Edit the role assigned to your API client
-3. Grant **Read** for the failing resource (e.g. Categories, Extension Attributes)
-4. Re-run export
+Jamf may have zero objects of that type, or list request failed — check `logs/export.log` and `logs/failures.json`.
 
-Use `--stop-on-401` to identify the first failing endpoint:
+## On-prem package binaries missing
 
-```bash
-python scripts/run_full_export.py --output output --stop-on-401
-```
+Requires SSH credentials in Settings. Without SSH, on-prem deployments write `gaps/package-binaries-ssh-required.md`.
 
-End-of-run summary lists `missing_privileges_by_endpoint`.
+## Inventory / FileVault gaps
 
-Source: `jamf_exporter/orchestrator.py` lines 149–156.
+Grant **Computers: Read** and **View Disk Encryption Recovery Key** on the API role. See `gaps/computers-inventory-privilege-missing.md` in backup folder.
 
-## urllib3 InsecureRequestWarning Flood
+## SSH works in Terminal but not in app
 
-### Symptom
+Re-save SSH password to Keychain after entering it, or import a valid private key. Clear bad keys with **Clear SSH private key**.
 
-Repeated warnings when `JAMF_VERIFY_TLS=false`.
+## MySQL backup fails
 
-### Fix
+- Server Tools 2.7.10+ required on Jamf server
+- Save MySQL password to Keychain (user from `DataBase.xml`, usually `jamfsoftware`)
+- Confirm `jamf-pro database test-connection` works via SSH manually
 
-Built-in: orchestrator filters these warnings when TLS verify is disabled. Ensure you are running the current `jamf_exporter` package, not legacy scripts.
+## Partial backup is valid
 
-Source: `jamf_exporter/orchestrator.py` lines 95–99.
+RBAC gaps or **Stop on first 401** may leave a partial but useful backup. Review `gaps/manual-workarounds.md` before treating export as complete.
 
-## Duplicate or Placeholder Env Vars
+## Getting help
 
-### Symptom
-
-Auth works in Jamf UI but fails in exporter; env shows placeholder values.
-
-### Cause
-
-Duplicate keys in `config/export.env` — last value wins, or placeholder block appended after real credentials.
-
-### Fix
-
-Remove duplicate entries; keep only one block of credentials.
-
-## Empty Object Type / Zero Objects
-
-### Symptom
-
-`Total objects: 0` in type README but no error.
-
-### Cause
-
-Jamf instance has no objects of that type, or list response parsed to zero IDs.
-
-### Verification
-
-Check Jamf Pro UI for that object class. Inspect `output/logs/export.log` for list request status.
-
-## XML/JSON Parse Errors
-
-### Symptom
-
-```
-Unable to parse Classic API list XML response.
-Unable to parse Jamf Pro API list JSON response.
-```
-
-### Cause
-
-Unexpected response body (HTML error page, empty body, API version mismatch).
-
-### Fix
-
-1. Confirm API endpoint is available on your Jamf version
-2. Check `output/logs/export.log` for raw status codes
-3. Review `docs/endpoint-verification.md` for endpoint compatibility notes
-
-Source: `jamf_exporter/collectors/generic.py` lines 69–87.
-
-## Export Stops Early with `--stop-on-401`
-
-### Expected Behavior
-
-This is intentional. The flag stops at the first 401 to help RBAC debugging. Remove the flag for a best-effort full export of all accessible types.
-
-## Manifest File Path Mismatch
-
-### Symptom
-
-Restore or external tools cannot find backup files.
-
-### Note
-
-`manifest.json` records `file_path` relative to the `--output` root (e.g. `output/backup/policies/1__Update_Inventory.xml`). Legacy `src/jamf_restore.py` resolves paths relative to manifest parent — behavior differs between tools.
-
-## Getting Help
-
-1. Check `output/logs/export.log`
-2. Review `output/gaps/manual-workarounds.md`
-3. Review `output/manifest/run-metadata.json` for `errors` and `missing_privileges_by_endpoint`
-4. Run tests: `pytest -q`
+1. `logs/export.log` in backup folder
+2. `logs/failures.json`
+3. `gaps/manual-workarounds.md`
+4. [GitHub Issues](https://github.com/roto31/jamf-dossier/issues)

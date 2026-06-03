@@ -4,7 +4,7 @@
 
 **Path:** `output/manifest/`
 
-Inventory and run statistics for the export.
+Inventory, DR metadata, and run statistics for the export.
 
 ### manifest.json
 
@@ -25,18 +25,22 @@ JSON array of export records. Each element matches `ExportRecord` dataclass:
 | `exported_at_utc` | string | ISO 8601 UTC timestamp |
 | `status` | string | `success` (default) |
 | `error` | string \| null | Error message if failed |
+| `api_family` | string | `classic_api` or `jamf_pro_api` |
+| `relative_path` | string | Path relative to output root |
+| `legacy_relative_path` | string | Path in legacy `raw/` mirror |
+| `artifact_kind` | string | `metadata`, `binary`, `inventory`, `server`, `secret_ref` |
+| `restore_method` | string | `POST`, `PUT`, `upload`, `vault_inject`, `mysql`, `manual` |
+| `redaction_applied` | bool | Whether redaction was applied |
 
-Use for: audit trails, integrity verification, restore planning.
+Legacy mirror: `manifests/manifest.json`.
 
 ### manifest.csv
 
-Same data as `manifest.json` in CSV format for spreadsheet analysis.
+Same data as `manifest.json` in CSV format.
 
 ### run-metadata.json
 
 **Produced by:** `orchestrator.write_run_metadata()`
-
-Run-level summary:
 
 ```json
 {
@@ -54,15 +58,35 @@ Run-level summary:
 }
 ```
 
+Written even on auth failure (with empty records and auth error metadata).
+
+### dr-manifest.json
+
+**Produced by:** `dr.manifest.write_dr_manifest()`
+
+DR bundle metadata. See [DR Bundle Directories](dr-bundle-directories.md).
+
 | Field | Description |
 |-------|-------------|
-| `exporter_version` | Hardcoded in orchestrator (`0.1.0`) |
-| `total_objects_exported` | Count of manifest records |
-| `object_counts` | Per-type success counts |
-| `error_count` | Total collector/runtime errors |
-| `missing_privileges_by_endpoint` | 401 errors grouped by API path |
+| `bundle_version` | `"2.0"` |
+| `source_jamf_url` | Source Jamf Pro URL |
+| `jamf_pro_version` | Probed version string |
+| `deployment_mode` | `cloud` or `on_prem` |
+| `tiers_completed` | List of completed backup tiers |
+| `restore_order` | Default object restore sequence |
+| `created_at` | ISO 8601 UTC timestamp |
 
-Written even on auth failure (with empty records and auth error metadata).
+### compatibility-spec.json
+
+**Produced by:** `compatibility.write_compatibility_spec()`
+
+Documents legacy ↔ current path mappings and behavior matrix (`BEHAVIOR_MATRIX`, `OUTPUT_COMPATIBILITY_MAPPING`).
+
+Legacy mirror: `manifests/compatibility-spec.json`.
+
+### output-compatibility.csv
+
+CSV version of output path compatibility mappings.
 
 ---
 
@@ -76,24 +100,20 @@ Written even on auth failure (with empty records and auth error metadata).
 
 Two sections:
 
-#### Endpoint/Feature Gaps
+1. **Endpoint/Feature Gaps** — static gaps from `get_manual_gaps()` (2 entries: `sso_configuration`, `api_integrations_secrets`)
+2. **Runtime Export Errors** — dynamic errors from the current run
 
-Static gaps from `endpoint_registry.get_manual_gaps()`. Objects or settings that cannot be fully captured via public API. Each entry includes:
+Legacy mirror: `gap-report.md` at output root.
 
-- `object_type`
-- `reason`
-- `workaround` (manual steps)
-- `source` (documentation reference)
+### Privilege gap notes (full_backup)
 
-#### Runtime Export Errors
+Additional gap files written by inventory/binary collectors:
 
-Dynamic errors from the current run:
-
-```
-- `categories` `/JSSResource/categories`: List request failed with status 401
-```
-
-If no gaps and no errors: file contains `No gaps detected.`
+| File | Trigger |
+|------|---------|
+| `computers-inventory-privilege-missing.md` | HTTP 401/403 on computers inventory |
+| `filevault-privilege-missing.md` | FileVault endpoint privilege missing |
+| `package-binaries-ssh-required.md` | On-prem without SSH for package fetch |
 
 ---
 
@@ -105,23 +125,30 @@ If no gaps and no errors: file contains `No gaps detected.`
 
 **Produced by:** `logging_utils.build_logger()`
 
-- Format: `YYYY-MM-DDTHH:MM:SSZ LEVEL jamf_exporter MESSAGE`
-- Also mirrored to stdout during export
-- Secrets redacted via `RedactingFormatter` (Bearer tokens, passwords, client_secret)
-
-Typical log entries:
-
-| Level | Example |
-|-------|---------|
-| INFO | `Collected 72 objects for policies` |
-| WARNING | `Token may be stale. Refreshing once for path=...` |
-| WARNING | `Request retry path=... status=503 attempt=2/4 wait=4s` |
-| WARNING | `Stopping early due to --stop-on-401 after object_type=categories` |
-| WARNING | `Missing privileges summary (401 by endpoint):` |
-| ERROR | `Authentication preflight failed: ...` |
-| ERROR | `Collector failed for object_type=...` (with stack trace) |
+- Format: timestamp + level + `jamf_exporter` + message
+- Mirrored to stdout during export
+- Secrets redacted via `RedactingFormatter`
 
 Final line: `Export complete. exported=N errors=M output=...`
+
+### failures.json
+
+**Produced by:** `failures.write_failure_report()`
+
+Structured JSON array:
+
+```json
+[
+  {
+    "timestamp_utc": "2026-06-01T03:46:36+00:00",
+    "object_type": "categories",
+    "endpoint": "/JSSResource/categories",
+    "status": 401,
+    "message": "List request failed with status 401",
+    "redaction_applied": true
+  }
+]
+```
 
 ---
 
@@ -133,8 +160,16 @@ flowchart TD
   Backup --> ManifestJSON["manifest.json row"]
   Collect --> Errors["all_errors list"]
   Errors --> GapsMD["gaps/manual-workarounds.md"]
+  Errors --> FailJSON["logs/failures.json"]
   Errors --> RunMeta["run-metadata.json error_count"]
   Errors --> Priv["run-metadata.json missing_privileges_by_endpoint"]
   Orch["orchestrator"] --> RunMeta
+  Orch --> DRMan["dr-manifest.json"]
+  Orch --> Compat["compatibility-spec.json"]
   Logger["build_logger()"] --> ExportLog["logs/export.log"]
 ```
+
+## Related
+
+- [Output Directory Index](index.md)
+- [DR Bundle Directories](dr-bundle-directories.md)
