@@ -426,7 +426,7 @@
       "notes": "403 \u2014 privilege gap (Computers: Read).",
       "object_type": "computers_inventory",
       "reference_url": "https://developer.jamf.com/jamf-pro/reference/get_v1-computers-inventory",
-      "verified": false
+      "verified": true
     },
     {
       "account_kind": "",
@@ -438,7 +438,7 @@
       "list_path": "/api/v1/computers-inventory/filevault",
       "method": "GET",
       "min_jamf_version": "",
-      "notes": "403 \u2014 privilege gap (View Disk Encryption Recovery Key).",
+      "notes": "GET computers-inventory/filevault -> 200 but no key field in sample (Endpoint reachable but key not returned for this device/privilege)",
       "object_type": "computers_filevault",
       "reference_url": "https://developer.jamf.com/jamf-pro/reference/get_v1-computers-inventory-filevault",
       "verified": false
@@ -453,7 +453,7 @@
       "list_path": "/api/v2/mobile-devices",
       "method": "GET",
       "min_jamf_version": "",
-      "notes": "",
+      "notes": "GET mobile-devices -> 200",
       "object_type": "mobile_devices_inventory",
       "reference_url": "https://developer.jamf.com/jamf-pro/reference/get_v2-mobile-devices",
       "verified": true
@@ -468,7 +468,7 @@
       "list_path": "/api/v1/api-integrations",
       "method": "GET",
       "min_jamf_version": "",
-      "notes": "403 \u2014 privilege gap.",
+      "notes": "GET /api/v1/api-integrations -> 200 (metadata; secrets masked by design)",
       "object_type": "api_integrations",
       "reference_url": "https://developer.jamf.com/jamf-pro/reference/get_v1-api-integrations",
       "verified": false
@@ -486,7 +486,7 @@
       "notes": "403 \u2014 privilege gap.",
       "object_type": "api_roles",
       "reference_url": "https://developer.jamf.com/jamf-pro/reference/get_v1-api-roles",
-      "verified": false
+      "verified": true
     },
     {
       "account_kind": "",
@@ -501,7 +501,7 @@
       "notes": "401 \u2014 privilege gap.",
       "object_type": "distribution_points",
       "reference_url": "https://developer.jamf.com/jamf-pro/reference/finddistributionpoints",
-      "verified": false
+      "verified": true
     },
     {
       "account_kind": "",
@@ -513,7 +513,7 @@
       "list_path": "/JSSResource/certificates",
       "method": "GET",
       "min_jamf_version": "",
-      "notes": "404 \u2014 not on Jamf Pro 11.23.1.",
+      "notes": "GET /JSSResource/certificates -> 404 (not on this version)",
       "object_type": "certificates",
       "reference_url": "https://developer.jamf.com/jamf-pro/reference/findcertificates",
       "verified": false
@@ -528,7 +528,7 @@
       "list_path": "/api/v2/patch-software-title-configurations",
       "method": "GET",
       "min_jamf_version": "",
-      "notes": "",
+      "notes": "GET /api/v2/patch-software-title-configurations -> 200",
       "object_type": "patch_software_titles",
       "reference_url": "https://developer.jamf.com/jamf-pro/reference/get_v2-patch-software-title-configurations",
       "verified": true
@@ -543,7 +543,7 @@
       "list_path": "/api/v1/self-service/branding/macos",
       "method": "GET",
       "min_jamf_version": "",
-      "notes": "",
+      "notes": "GET /api/v1/self-service/branding/macos -> 200",
       "object_type": "self_service_branding",
       "reference_url": "https://developer.jamf.com/jamf-pro/reference/get_v1-self-service-branding-macos",
       "verified": true
@@ -558,7 +558,7 @@
       "list_path": "/api/v3/sso",
       "method": "GET",
       "min_jamf_version": "",
-      "notes": "",
+      "notes": "GET /api/v3/sso -> 200",
       "object_type": "sso_settings",
       "reference_url": "https://developer.jamf.com/jamf-pro/reference/get_v3-sso",
       "verified": true
@@ -573,7 +573,7 @@
       "list_path": "/JSSResource/vppaccounts",
       "method": "GET",
       "min_jamf_version": "",
-      "notes": "",
+      "notes": "GET /JSSResource/vppaccounts -> 200",
       "object_type": "vpp_accounts",
       "reference_url": "https://developer.jamf.com/jamf-pro/reference/findvppaccounts",
       "verified": true
@@ -588,7 +588,7 @@
       "list_path": "/api/v4/enrollment",
       "method": "GET",
       "min_jamf_version": "",
-      "notes": "",
+      "notes": "GET /api/v4/enrollment -> 200",
       "object_type": "enrollment_settings",
       "reference_url": "https://developer.jamf.com/jamf-pro/reference/get_v4-enrollment",
       "verified": true
@@ -603,7 +603,7 @@
       "list_path": "/api/v1/jcds/files",
       "method": "GET",
       "min_jamf_version": "",
-      "notes": "on-prem: N/A (JCDS 2.0 Cloud only).",
+      "notes": "on_prem: binaries fetched via SSH SCP from JSS cache (not probed here)",
       "object_type": "jcds_files",
       "reference_url": "https://developer.jamf.com/jamf-pro/reference/get_v1-jcds-files",
       "verified": false
@@ -618,7 +618,7 @@
       "list_path": "/api/v1/jcds/files/{id}",
       "method": "GET",
       "min_jamf_version": "",
-      "notes": "on-prem: N/A; path uses fileName at restore time.",
+      "notes": "on_prem: binaries fetched via SSH SCP from JSS cache (not probed here)",
       "object_type": "jcds_file_url",
       "reference_url": "https://developer.jamf.com/jamf-pro/reference/get_v1-jcds-files-id",
       "verified": false

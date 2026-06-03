@@ -1,5 +1,7 @@
 # Cloud API restore
 
+**Honest scope:** On-prem + MySQL restore is the closest path to full fidelity. Cloud export is configuration + inventory + binaries + vaulted secrets — **not** a literal clone. Existing devices require **re-enrollment** on a new server.
+
 Cloud export provides configuration, inventory snapshots, JCDS binaries (when on JCDS 2.0), and vaulted secrets. It does **not** reproduce MDM device trust or a literal copy of the tenant.
 
 ## Restore flow

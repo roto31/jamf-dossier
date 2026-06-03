@@ -1,70 +1,123 @@
 # Setup & Installation
 
-## System requirements
+## Prerequisites
 
 | Requirement | Notes |
 |-------------|-------|
-| macOS | 15 or later |
-| Disk space | Depends on Jamf environment size; package binaries can be large |
-| Network | HTTPS to Jamf Pro (and SSH for on-prem DR tiers) |
-| Jamf credentials | OAuth API client (preferred) or API user with Read privileges |
+| Python 3.10+ | `pyproject.toml` → `requires-python = ">=3.10"` |
+| Network access to Jamf Pro | HTTPS to your instance URL |
+| Jamf API credentials | OAuth client credentials (preferred) or API user Basic auth |
+| Read privileges | API role must have Read access for each object type you export |
+| macOS (optional) | Required for Swift `JamfBackup/` app and Swift parity tests |
 
-## Install Jamf Dossier
+## Clone Repository
 
-1. Download `Jamf Dossier-<version>-macos.dmg` from [Releases](https://github.com/roto31/jamf-dossier/releases)
-2. Verify SHA-256 (optional) using `release/<version>/checksums.sha256`
-3. Open DMG → drag to **Applications**
-4. Launch **Jamf Dossier**
+```bash
+git clone https://github.com/roto31/Jamf-Settings-Analysis.git
+cd Jamf-Settings-Analysis
+```
 
-Do **not** install `v0.1.1` — use v0.1.2 or newer.
+## Virtual Environment
 
-## Jamf Pro API setup
+```bash
+python3 -m venv .venv
+source .venv/bin/activate   # macOS/Linux
+pip install -e .
+```
 
-1. Jamf Pro → **Settings → System Settings → API Roles and Clients**
-2. Create an API client (OAuth) or API user
-3. Assign a role with **Read** for each object class you need
-4. In Jamf Dossier **Settings**, save credentials to Keychain
+Installs `jamf_exporter` with dependencies: `requests>=2.32.0`, `cryptography>=42.0.0`.
 
-### URL format
+For development:
 
-| Deployment | Example |
-|------------|---------|
-| Jamf Cloud | `https://yourtenant.jamfcloud.com` |
-| On-prem | `https://jamf.example.com:8443` |
+```bash
+pip install -e ".[dev]"
+```
 
-Use the base URL only — no `/api` or `/JSSResource` suffix.
+## Configuration
 
-### TLS
+### 1. Copy the example env file
 
-| Setting | When |
-|---------|------|
-| **Verify TLS** on | Production and Jamf Cloud |
-| **Verify TLS** off | Lab only — self-signed on-prem certificates |
+```bash
+cp config/export.example.env config/export.env
+```
 
-## On-prem SSH (optional)
+`config/export.env` is gitignored and must never be committed.
 
-For MySQL backup, Tomcat configs, and package binary SCP:
+### 2. Edit `config/export.env`
 
-| Field | Typical value |
-|-------|---------------|
-| SSH host | Jamf Pro server hostname |
-| SSH port | `22` |
-| SSH user | `jamfadmin` |
-| MySQL user | `jamfsoftware` (from `DataBase.xml`) |
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `JAMF_URL` | Yes | — | Jamf Pro base URL |
+| `JAMF_CLIENT_ID` | OAuth path | — | OAuth API client ID |
+| `JAMF_CLIENT_SECRET` | OAuth path | — | OAuth API client secret |
+| `JAMF_USERNAME` | Fallback | — | API user for Basic-to-token auth |
+| `JAMF_PASSWORD` | Fallback | — | API user password |
+| `JAMF_VERIFY_TLS` | No | `true` | Set `false` for self-signed on-prem certificates |
+| `JAMF_TIMEOUT_SECONDS` | No | `60` | HTTP request timeout |
+| `JAMF_MAX_RETRIES` | No | `3` | Max retry count for 5xx responses |
+| `JAMF_RETRY_BACKOFF_SECONDS` | No | `2` | Backoff multiplier between retries |
+| `JAMF_ALLOW_RESTORE` | No | `false` | Must be `true` for non-dry-run restore |
 
-Save SSH and MySQL passwords to Keychain in Settings, or import an SSH private key.
+Source: `config/export.example.env`, `jamf_exporter/config.py`.
 
-Requires **Jamf Pro Server Tools 2.7.10+** on the server for database backup.
+### 3. Optional — Full backup / DR tier
 
-## First backup
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `JAMF_SSH_HOST` | — | Jamf Pro server hostname (on-prem package fetch) |
+| `JAMF_SSH_USER` | — | SSH username |
+| `JAMF_SSH_PORT` | `22` | SSH port |
+| `JAMF_SSH_IDENTITY_FILE` | — | Path to SSH private key |
+| `JAMF_DR_PASSPHRASE` | — | Passphrase for secrets vault encryption |
+| `JAMF_RESTORE_TARGET_URL` | — | Target URL for live restore (safety gate) |
+| `JAMF_FIXTURE_ROOT` | — | Offline fixture directory for testing |
 
-See [Getting Started](getting-started.md).
+### 4. Load environment before running
 
-## Updates
+```bash
+set -a && source config/export.env && set +a
+```
 
-Download a newer DMG from Releases and replace the app in Applications. Your Keychain credentials and destination folder bookmark persist.
+## On-Prem / Self-Signed TLS
 
-## Related
+```bash
+JAMF_VERIFY_TLS="false"
+```
 
-- [Operator Guide](jamf-dossier-operator-guide.md)
-- [Troubleshooting](troubleshooting.md)
+When TLS verification is disabled, `orchestrator.py` suppresses `urllib3` `InsecureRequestWarning`.
+
+## Jamf API Client Setup (Jamf Admin)
+
+1. In Jamf Pro: **Settings → System Settings → API Roles and Clients**
+2. Create an API client (OAuth) or ensure your API user has a role with **Read** privileges
+3. Record credentials in `config/export.env`
+
+Missing Read privileges produce HTTP 401 on specific endpoints, logged in `output/logs/export.log`.
+
+## Verify Installation
+
+```bash
+pytest -q
+```
+
+Tests cover auth, config, manifest, redaction, registry, documentation builder, output indexes, inventory, package fetcher, restore ordering, export parity fixtures, and failures/compatibility.
+
+## Sync Endpoint Registry (Optional)
+
+After modifying endpoint specs:
+
+```bash
+python scripts/sync_endpoint_registry.py
+```
+
+## Optional: jamf_mcp Subproject
+
+See [jamf_mcp/docs/INSTALLATION.md](../jamf_mcp/docs/INSTALLATION.md).
+
+## Optional: JamfBackup Swift App
+
+```bash
+cd JamfBackup && swift build && swift run JamfBackup
+```
+
+See [JamfBackup README](../JamfBackup/README.md).

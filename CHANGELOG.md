@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-06-02
+
+### Added
+
+- **Code:** Live restore writers (classic/JPAPI/package/inventory/vault-inject) behind existing safety gates; Swift `InventoryCollector` and package binary SCP; DR UI wiring (tier settings, secrets wizard, restore wizard); `scripts/sync_registry_from_probe.py`, `scripts/operator_smoke.sh`, `dr-live-drill.yml`; restore and Bundle v2 parity tests.
+- **Data:** Registry sync from re-probe — **36/41** endpoints verified.
+
+### Changed
+
+- **Build/CI:** Public releases created as GitHub **prerelease** until explicit promote; executive status doc added/updated.
+
 ## [0.2.0] - 2026-06-02
 
 ### Added

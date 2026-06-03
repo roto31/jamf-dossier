@@ -1,86 +1,176 @@
 # Usage Guide
 
-## Quick start
+## Quick Start
 
-1. Install from [Releases](https://github.com/roto31/jamf-dossier/releases)
-2. Configure Jamf URL and API credentials in **Settings**
-3. Choose backup folder → **Run Backup**
+```bash
+cd Jamf-Settings-Analysis
+source .venv/bin/activate
+set -a && source config/export.env && set +a
+python scripts/run_full_export.py --output output
+python scripts/generate_output_indexes.py --output output
+```
 
-See [Getting Started](getting-started.md) for details.
+## CLI Reference
 
-## Main window
+**Script:** `scripts/run_full_export.py`
 
-| Control | Purpose |
-|---------|---------|
-| **Choose Folder…** | Set backup destination (security-scoped bookmark) |
-| **Reveal in Finder** | Open destination after export |
-| **Timestamped subfolder** | Each run under `YYYY-MM-DDTHHMMSSZ/` |
-| **Backup all** | Export all 41 registry types |
-| **Stop on first 401** | Fail fast on first permission error |
-| **Run Backup** | Start export after confirmation sheet |
+| Flag | Default | Description |
+|------|---------|-------------|
+| `--output` | `output` | Root directory for all generated artifacts |
+| `--stop-on-401` | off | Stop export immediately on first HTTP 401 (RBAC tuning) |
 
-## Settings
+Source: `scripts/run_full_export.py` lines 19–28.
 
-| Setting | Effect |
-|---------|--------|
-| Jamf Pro URL | API base URL |
-| OAuth / Basic credentials | Stored in Keychain |
-| Verify TLS | Certificate validation |
-| Include inventory | Device JSON + FileVault CSV |
-| Include MySQL backup | On-prem Server Tools database dump |
-| Include Tomcat configuration | SSH copy of Tomcat files |
-| SSH host, port, user | On-prem server access |
+## End-to-End Walkthrough
 
-## End-to-end walkthrough
+### Step 1 — Configure credentials
 
-### Step 1 — Configure
+Edit `config/export.env` with your Jamf URL and OAuth or Basic credentials. See [Setup & Installation](setup-installation.md).
 
-Settings → Jamf URL + credentials → Keychain. See [Setup](setup-installation.md).
+### Step 2 — Run full export
 
-### Step 2 — Select scope
+```bash
+python scripts/run_full_export.py --output output
+```
 
-- **Backup all** (default) or pick object types in the backup panel
-- Optional: **Stop on first 401** for RBAC debugging
+The orchestrator:
 
-### Step 3 — Run backup
+1. Creates output directory and all DR bundle subdirectories (`BUNDLE_DIRS`)
+2. Loads config from environment (or fixture session if `JAMF_FIXTURE_ROOT` set)
+3. Runs auth preflight (`get_token()`)
+4. Probes Jamf Pro version and deployment mode
+5. Iterates all **41** endpoint specs in registry order
+6. For each type: list → detail → documentation + backup + manifest records
+7. Writes DR manifest, crosslinks, API citations, gap report, failure report, compatibility spec
+8. Writes legacy mirrors (`docs/`, `raw/`, `manifests/`, `gap-report.md`)
+9. Logs to `output/logs/export.log` and stdout
 
-Confirm destination and Jamf URL on the confirmation sheet. Progress appears in the UI; detailed log in `logs/export.log`.
+### Step 3 — Generate indexes (recommended)
+
+```bash
+python scripts/generate_output_indexes.py --output output
+```
+
+Creates README catalog files in every output subdirectory.
 
 ### Step 4 — Review output
 
 | Path | Purpose |
 |------|---------|
-| `documentation/` | Human-readable Markdown |
-| `backup/` | Raw JSON/XML |
-| `manifest/manifest.json` | Inventory + checksums |
-| `manifest/dr-manifest.json` | DR bundle metadata |
-| `gaps/manual-workarounds.md` | Gaps and errors |
-| `documentation/crosslinks.md` | Policy relationships |
+| `output/documentation/` | Human-readable Markdown per object |
+| `output/backup/` | Raw JSON/XML payloads |
+| `output/manifest/manifest.json` | Full inventory with SHA-256 checksums |
+| `output/manifest/dr-manifest.json` | DR bundle metadata |
+| `output/gaps/manual-workarounds.md` | API gaps and runtime errors |
+| `output/documentation/crosslinks.md` | Policy ↔ script/package relationships |
+| `output/logs/failures.json` | Structured failure report |
 
-[Output Directory Index](output/index.md)
+See [Output Directory Index](output/index.md) for complete artifact documentation.
 
-### Step 5 — Interpret results
+### Step 5 — Interpret exit code
 
-| UI result | Meaning |
-|-----------|---------|
-| Success | All collectors succeeded |
-| Completed with errors | Some types failed — review gaps and log |
-| Failed to start | Auth or URL problem — check Settings |
+| Exit | Meaning |
+|------|---------|
+| `0` | All collectors succeeded |
+| `1` | One or more list/detail requests failed (check logs and gaps) |
+| `2` | Auth preflight failed — fix credentials or URL |
 
-## RBAC tuning
+## Full Backup Tier (Python API)
 
-Enable **Stop on first 401**, run backup, then check `manifest/run-metadata.json` → `missing_privileges_by_endpoint`. Grant Read in Jamf Pro API role and re-run.
+The CLI does **not** expose `--full-backup`. To enable inventory, binaries, and server filesystem tiers, call the Python API directly:
 
-## Re-running backups
+```python
+from pathlib import Path
+from jamf_exporter import run_full_export
 
-Safe to re-run; files are overwritten per object ID. Use timestamped subfolders to keep history.
+# Requires JAMF_SSH_HOST + JAMF_SSH_USER for on-prem package binaries
+run_full_export(Path("output"), full_backup=True)
+```
 
-## Restore planning
+Or use the test harness pattern in `tests/test_export_parity_fixtures.py`.
 
-Jamf Dossier produces DR bundles for planning. Live restore to another server requires lab procedures — see [DR Overview](dr/README.md). Do not restore to production without testing.
+When `full_backup=True`:
+
+- `collect_inventory()` exports computers, mobile devices, FileVault keys
+- `fetch_package_binaries()` downloads package `.pkg` files
+- `fetch_jss_filesystem()` probes server filesystem (if SSH configured)
+- `tiers_completed` in `dr-manifest.json` reflects completed tiers
+
+See [DR Bundle Directories](output/dr-bundle-directories.md).
+
+## RBAC Tuning with `--stop-on-401`
+
+```bash
+python scripts/run_full_export.py --output output --stop-on-401
+```
+
+On 401, the orchestrator records the error, breaks the collection loop, and still writes partial manifest/gaps/documentation.
+
+Source: `jamf_exporter/orchestrator.py` lines 166–171.
+
+## Fixture Mode (Offline Testing)
+
+```bash
+export JAMF_FIXTURE_ROOT="tests/fixtures/jamf"
+export JAMF_URL="https://fixture.jamf.test"
+export JAMF_CLIENT_ID="fixture-client"
+export JAMF_CLIENT_SECRET="fixture-secret"
+python scripts/run_full_export.py --output /tmp/fixture-export
+```
+
+Uses `fixture_transport.create_fixture_session()` instead of live HTTP.
+
+## Publish Site Backup
+
+```bash
+python scripts/publish_lha_backup.py \
+  --source output \
+  --destination Lotus-Home-Academy-Backup \
+  --site-name "Lotus Home Academy" \
+  --jamf-url "https://lotushomeacademy.edu:8443"
+```
+
+See [Auxiliary Scripts](scripts/auxiliary-scripts.md).
+
+## Restore Preview (Dry-Run)
+
+```python
+from pathlib import Path
+from jamf_exporter.config import RuntimeConfig
+from jamf_exporter.restore.orchestrator import restore_from_bundle
+
+preview = restore_from_bundle(
+    Path("output"),
+    "https://lab.jamf.example.com",
+    RuntimeConfig.from_env(),
+    dry_run=True,
+)
+print(f"Preview written to {preview}")
+```
+
+Writes `output/restore/preview.md`. Live restore requires additional safety gates — see [DR Overview](dr/README.md).
+
+## Re-Running Exports
+
+- Safe to re-run; documentation builder clears stale per-object `.md` files
+- Backup files overwritten per object ID
+- Manifest regenerated each run
+- `output/` is gitignored — archive exports outside the repo for version history
+
+## Legacy Export Path (Not Recommended)
+
+```bash
+python src/jamf_audit_exporter.py \
+  --config config/jamf_config.example.json \
+  --catalog config/endpoint_catalog.json \
+  --output output \
+  --verbose
+```
+
+See [Legacy Tools](scripts/legacy-tools.md).
 
 ## Related
 
-- [Export Engine](export-engine.md)
-- [Operator Guide](jamf-dossier-operator-guide.md)
+- [Setup & Installation](setup-installation.md)
 - [Troubleshooting](troubleshooting.md)
+- [Architecture](architecture.md)

@@ -1,5 +1,7 @@
 # On-prem MySQL restore
 
+**Honest scope:** On-prem + MySQL restore is the closest path to full fidelity. Cloud export is configuration + inventory + binaries + vaulted secrets — **not** a literal clone. Existing devices require **re-enrollment** on a new server.
+
 Use this path when you have a `server/database/jamf_*.sql.gz` dump from Server Tools SSH backup.
 
 1. Install a fresh Jamf Pro instance at the **same major version** as the source (see `manifest/dr-manifest.json`).

@@ -1,5 +1,7 @@
 # Secrets vault
 
+**Honest scope:** On-prem + MySQL restore is the closest path to full fidelity. Cloud export is configuration + inventory + binaries + vaulted secrets — **not** a literal clone. Existing devices require **re-enrollment** on a new server.
+
 Jamf never returns webhook `client_secret`, LDAP bind passwords, API integration secrets, or private keys in cleartext. The DR vault captures operator-supplied values once at backup time.
 
 ## Python (CLI)
