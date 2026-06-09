@@ -25,13 +25,17 @@ These registry paths were wrong or incomplete on Jamf Pro **11.x** (see prod run
 | jamf_pro_user_accounts | `/JSSResource/accounts/userid` | `GET /JSSResource/accounts` → detail `.../userid/{id}` | `GET /api/v1/accounts` |
 | jamf_pro_user_groups | `/JSSResource/accounts/groupid` | `GET /JSSResource/accounts` → detail `.../groupid/{id}` | `GET /api/v1/accounts` |
 
-Paths unchanged but 404 may mean **empty** or **missing privilege** (not wrong URL):
+Paths unchanged but may be **skipped** as expected-unavailable (v0.4.0+) when probe or registry marks them N/A — not listed in `failures.json`:
 
-| Object type | Path | Notes |
-|-------------|------|-------|
-| app_installers | `/api/v1/app-installers` | Read App Installers |
-| computer_prestages | `/api/v2/computer-prestages` | No ADE prestages or Read Computer PreStages |
-| webhooks | `/api/v1/webhooks` | None configured or Read Webhooks |
+| Object type | Path | Skip reason |
+|-------------|------|-------------|
+| app_installers | `/api/v1/app-installers` | Optional; 404 when feature unavailable |
+| computer_prestages | `/api/v2/computer-prestages` | Optional; 404 when ADE prestages unavailable |
+| webhooks | `/api/v1/webhooks` | Optional; probe 404 on some 11.x instances |
+| certificates | `/JSSResource/certificates` | Optional; not on Jamf Pro 11.23.1 |
+| jcds_files, jcds_file_url | `/api/v1/jcds/files` | Cloud-only; skipped on on-prem |
+
+Use `--no-skip-probe` to force collection when debugging.
 
 Validate any path on your server: `curl -H "Authorization: Bearer $TOKEN" "$JAMF_URL/api/v1/jamf-pro-version"` and compare to `/api/doc`.
 
@@ -48,5 +52,5 @@ After deploying a build with these fixes:
 
 1. Run a full export against your Jamf Pro 11.x instance.
 2. Confirm `manifest/run-metadata.json` contains `jamf_pro_version`.
-3. Compare `logs/failures.json` to baseline (8 API 404s from `192523Z`).
-4. Expect settings + accounts 404s cleared; prestages/webhooks/app-installers may remain if empty or RBAC-limited.
+3. Compare `logs/failures.json` — expect **zero** expected-unavailable entries on on-prem 11.x after v0.4.0 (see `gaps/skipped-endpoints.json` instead).
+4. Prestages/webhooks/app-installers may appear under **Expected Unavailable** when the API is not exposed on your instance.

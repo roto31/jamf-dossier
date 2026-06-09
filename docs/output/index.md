@@ -32,10 +32,11 @@ output/
 
 ```mermaid
 flowchart TB
-  Export["run_full_export()"] --> Backup["backup/"]
-  Export --> Docs["documentation/"]
+  Export["run_full_export()"] --> Filter["filter_specs_for_run()"]
+  Filter --> Backup["backup/"]
+  Filter --> Docs["documentation/"]
   Export --> Manifest["manifest/"]
-  Export --> Gaps["gaps/"]
+  Filter --> Gaps["gaps/"]
   Export --> Logs["logs/"]
   Export --> Bin["binaries/"]
   Export --> Inv["inventory/"]
@@ -61,6 +62,7 @@ flowchart TB
 | `manifest/output-compatibility.csv` | `compatibility.write_compatibility_spec()` |
 | `manifests/*` | manifest + compatibility (legacy mirror) |
 | `gaps/manual-workarounds.md` | `gaps.write_gap_report()` |
+| `gaps/skipped-endpoints.json` | `registry_filter.write_skipped_endpoints()` |
 | `gap-report.md` | `gaps.write_gap_report()` (legacy mirror) |
 | `logs/export.log` | `logging_utils.build_logger()` |
 | `logs/failures.json` | `failures.write_failure_report()` |

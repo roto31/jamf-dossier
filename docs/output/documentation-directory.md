@@ -4,6 +4,8 @@
 
 Human-readable Markdown documentation generated from exported Jamf objects.
 
+For limits (script bodies, policy scope, smart search criteria, GitHub publish path), see [documentation-coverage-gaps.md](../documentation-coverage-gaps.md).
+
 ## Structure
 
 ```

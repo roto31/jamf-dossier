@@ -157,7 +157,53 @@ Production `manifest.json` uses `file_path` relative to output root. Legacy `src
 
 ## ModuleNotFoundError: requests
 
-Activate venv and run `pip install -e .` before executing scripts.
+System `python3` does not include project dependencies.
+
+```bash
+bash scripts/ensure_python_env.sh
+python3 scripts/run_full_export.py --output ./fresh-bundle
+```
+
+CLI scripts re-exec into `.venv/bin/python` when `.venv` exists. Do not remove `jamf_exporter/bootstrap_env.py` or lazy `jamf_exporter/__init__.py`.
+
+## Missing JAMF_URL (ValueError)
+
+`RuntimeConfig.from_env()` loads `config/export.env` automatically. If this error persists, `JAMF_URL` is empty or missing in that file — copy `config/export.example.env` and set your tenant URL.
+
+## Expected unavailable endpoints (not export failures)
+
+As of v0.4.0, the exporter **skips** known platform/instance gaps before collection. Skipped types are listed in `gaps/skipped-endpoints.json` and under **Expected Unavailable** in `gap-report.md`. They do **not** appear in `logs/failures.json`.
+
+| Symptom | Typical cause | Action |
+|---------|---------------|--------|
+| JCDS skipped on on-prem | JCDS 2.0 is cloud-only | Use `scripts/run_full_export.py --full` with SSH for package binaries |
+| 404 on `app_installers`, `computer_prestages`, `webhooks`, `certificates` | Feature/API not on this Jamf Pro version or instance | Documented as optional; no retry noise |
+| Stale skip after enabling a feature | `probe-report.json` out of date | Re-run `probe.py`, sync registry, or use `--no-skip-probe` once |
+
+Override skip logic for debugging: `python scripts/run_full_export.py --no-skip-probe`.
+
+## HTTP 500 on `/api/v1/jcds/files` (legacy)
+
+On releases before v0.4.0, JCDS list calls on on-prem could surface as HTTP 500 in `failures.json`. Current builds skip `jcds_files` / `jcds_file_url` on on-prem automatically.
+
+## publish_lha_backup: ValueError int('singleton')
+
+Fixed in `output_indexes._jamf_id_sort_key()`. Pull latest `main`, clear `__pycache__`, re-run publish. Singleton objects (check-in settings, inventory collection, etc.) use `jamf_id: "singleton"`.
+
+## GitHub “Error loading page” on backup documentation
+
+Broken **Related** links used `../documentation/...` from inside `documentation/{type}/`, which GitHub resolves as `documentation/documentation/...`. Regenerate indexes after updating `output_indexes.py` (see [jamf-backup-index-links](../.cursor/rules/jamf-backup-index-links.mdc)).
+
+Correct URLs:
+
+- `.../Lotus-Home-Academy-Backup/documentation/{type}/README.md`
+- `.../Lotus-Home-Academy-Backup/backup/{type}/`
+
+## GitHub push: Authentication failed
+
+- `--github-repo` must be a real `owner/repo` (not placeholder `org/jamf-backups`).
+- `BACKUP_PUBLISH_TOKEN` must be a valid PAT with **Contents: Write** on that repository.
+- Local publish (without `--github-push`) does not require a token.
 
 ## Export Parity Failures
 

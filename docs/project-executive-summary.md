@@ -1,7 +1,7 @@
 # Jamf Dossier — Executive Project Status
 
-**As of:** 2026-06-02 (post closeout plan, pre–live operator smoke)  
-**Version:** `0.3.0` (closeout release)  
+**As of:** 2026-06-08 (v0.4.0 gap closure)  
+**Version:** `0.4.0`  
 **Private `main`:** ahead of `v0.2.0` with DR closeout engineering  
 **Public release (prior):** [jamf-dossier v0.2.0](https://github.com/roto31/jamf-dossier/releases/tag/v0.2.0)  
 **Related:** [project-status.md](project-status.md) (legacy checklist — points here)
@@ -12,7 +12,7 @@
 
 | Lens | Complete | Remaining | Score |
 |------|----------|-----------|-------|
-| **Shippable product (config backup + release pipeline)** | CI, signed DMG, public publish, macOS app, prerelease promotion path | Operator smoke on prod + lab dry-run | **~95%** |
+| **Shippable product (config backup + release pipeline)** | CI, signed DMG, public publish, macOS app, v0.4.0 feature set | Operator smoke on prod + lab live drill sign-off | **~97%** |
 | **Bundle v2 DR platform (6-phase plan)** | Schema, registry sync, vault, inventory (Python + Swift), restore writers, UI wiring, harness | Live restore lab drill, FileVault privilege | **~88%** |
 | **Full-content backup on your Jamf instance** | Tier-A, mobile inventory, computers/API roles/distribution points (post–re-probe) | FileVault bulk (PARTIAL), SSH package binaries in production run | **~78%** |
 | **Automated disaster recovery (restore to new server)** | Dry-run preview, safety gates, live writer implementations (gated) | Non–dry-run lab validation, vault inject on real target | **~72%** |
@@ -31,7 +31,7 @@
 | Live restore writers | ~7% | `classic_put_post`, `jpapi_post`, `package_upload`, `inventory_import`, `vault_inject`; gates unchanged | **90%** | **10%** |
 | Operator validation | ~3% | `operator_smoke.sh`, `dr-live-drill.yml`; no documented prod/lab run | **45%** | **55%** |
 | Doc drift | (risk) | 41-type messaging; R7 scope on all `docs/dr/*.md` | **100%** | **0%** |
-| Ship v0.3.0 (UAT → promote) | release | This release (`0.3.0`, prerelease publish) | **in progress** | **0%** after tag + promote |
+| Ship v0.4.0 (UAT → promote) | release | **v0.4.0** gap closure tagged; public DMG via release workflow | **in progress** | promote after smoke |
 
 **Codeable closeout (AUTO): ~97% complete.** **Operator-only: ~35% remaining** (privilege fine-tuning + live smoke).
 
@@ -121,4 +121,4 @@ LDAP bind passwords (masked), MDM trust (re-enrollment), certificates endpoint a
 
 ## One-line status
 
-Jamf Dossier **v0.3.0 closes the engineering closeout** (~88% program complete): DR UI wired, Swift/Python Bundle v2 parity, restore writers implemented with safety gates, and **~12%** left for operator live smoke, FileVault privilege, and lab restore validation.
+Jamf Dossier **v0.4.0** closes dev-addressable export gaps: registry filter (expected-unavailable skips), plain-text script fallback, DR manifest on every run, and operator smoke/doc verification. **~12%** remains operator-only (FileVault privilege, lab live restore sign-off).

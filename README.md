@@ -42,8 +42,10 @@ backup-run/
 ├── backup/              # Raw JSON/XML per object
 ├── documentation/       # Markdown docs + crosslinks
 ├── manifest/            # manifest.json, dr-manifest.json, run metadata
-├── gaps/                # API gaps and privilege notes
-├── logs/                # export.log, failures.json
+├── gaps/                # Manual gaps, expected-unavailable skips, privilege notes
+│   ├── manual-workarounds.md
+│   └── skipped-endpoints.json   # v0.4.0+ platform/instance skips (not errors)
+├── logs/                # export.log, failures.json (unexpected errors only)
 ├── inventory/           # Device inventory (when enabled)
 ├── binaries/            # Package .pkg files (when enabled)
 └── server/              # On-prem Tomcat/MySQL artifacts (when enabled)

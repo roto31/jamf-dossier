@@ -18,6 +18,7 @@ flowchart TB
     Auth["auth.JamfTokenProvider"]
     Client["http_client.JamfApiClient"]
     Registry["endpoint_registry"]
+    Filter["registry_filter"]
     Collector["collectors.generic"]
     Inventory["collectors.inventory"]
     Binaries["binaries.package_fetcher"]
@@ -62,7 +63,8 @@ flowchart TB
   Orch --> Auth
   Orch --> Client
   Orch --> Registry
-  Registry --> Collector
+  Registry --> Filter
+  Filter --> Collector
   Client --> JamfPro
   Auth --> JamfPro
   Collector --> DocBuilder
@@ -110,7 +112,9 @@ flowchart TD
   BasicReq --> BasicOK{"status 200?"}
   BasicOK -->|No| AuthFail
   BasicOK -->|Yes| TokenReady
-  TokenReady --> CollectLoop["Iterate 41 endpoint specs"]
+  TokenReady --> ProbeVer["Probe version + deployment"]
+  ProbeVer --> FilterLoop["filter_specs_for_run()"]
+  FilterLoop --> CollectLoop["Collect active endpoint specs"]
 ```
 
 Source: `jamf_exporter/auth.py`, `jamf_exporter/orchestrator.py` lines 134–146.
@@ -119,7 +123,9 @@ Source: `jamf_exporter/auth.py`, `jamf_exporter/orchestrator.py` lines 134–146
 
 ```mermaid
 flowchart LR
-  Spec["EndpointSpec"] --> ListReq["GET list_path"]
+  AllSpecs["41 EndpointSpec rows"] --> Filter["filter_specs_for_run()"]
+  Filter --> Spec["Active EndpointSpec"]
+  Spec --> ListReq["GET list_path"]
   ListReq --> StatusCheck{"status >= 400?"}
   StatusCheck -->|Yes| RecordErr["Record error, return empty"]
   StatusCheck -->|No| ParseIDs["Parse object IDs"]
@@ -139,7 +145,7 @@ Source: `jamf_exporter/collectors/generic.py`, `jamf_exporter/documentation_buil
 
 ## Full Backup Tier Pipeline
 
-When `full_backup=True` (Python API only; see [Usage Guide](usage-guide.md)):
+When `full_backup=True` (CLI: `--full`; see [Usage Guide](usage-guide.md)):
 
 ```mermaid
 flowchart TD

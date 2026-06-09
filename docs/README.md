@@ -10,6 +10,7 @@ Welcome to the project documentation. This wiki mirrors GitHub Wiki navigation u
 | [Architecture](architecture.md) | System design, data flow, Mermaid diagrams |
 | [Setup & Installation](setup-installation.md) | Prerequisites, venv, credentials, optional DR/SSH vars |
 | [Usage Guide](usage-guide.md) | End-to-end export walkthrough |
+| [Documentation coverage gaps](documentation-coverage-gaps.md) | Scripts, policies, smart groups, searches vs backup vs GitHub-readable docs |
 | [Troubleshooting](troubleshooting.md) | Verified fixes for common failures |
 
 ## Scripts & Code
@@ -58,6 +59,7 @@ Welcome to the project documentation. This wiki mirrors GitHub Wiki navigation u
 |------|-------------|
 | [Export Parity Testing](testing/export-parity.md) | Python vs Swift fixture comparison |
 | [Release Versioning](release-versioning.md) | SemVer and data revision policy |
+| [CHANGELOG](../CHANGELOG.md) | Full version history from v0.1.0 through present |
 | [Jamf Backup Operator Guide](jamf-backup-operator-guide.md) | Native macOS app operations |
 
 ## Related Subprojects

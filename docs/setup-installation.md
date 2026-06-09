@@ -33,6 +33,14 @@ For development:
 pip install -e ".[dev]"
 ```
 
+One-shot bootstrap (creates `.venv` if missing, installs `[dev]`):
+
+```bash
+bash scripts/ensure_python_env.sh
+```
+
+`scripts/run_full_export.py` and `scripts/publish_lha_backup.py` automatically re-run under `.venv/bin/python` when it exists, so bare `python3 scripts/...` works after bootstrap.
+
 ## Configuration
 
 ### 1. Copy the example env file

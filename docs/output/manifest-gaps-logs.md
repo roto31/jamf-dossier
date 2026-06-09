@@ -101,7 +101,14 @@ CSV version of output path compatibility mappings.
 Two sections:
 
 1. **Endpoint/Feature Gaps** — static gaps from `get_manual_gaps()` (2 entries: `sso_configuration`, `api_integrations_secrets`)
-2. **Runtime Export Errors** — dynamic errors from the current run
+2. **Expected Unavailable (not errors)** — skipped endpoints from `filter_specs_for_run()` (v0.4.0+), also in `skipped-endpoints.json`
+3. **Runtime Export Errors** — unexpected errors only (401 privilege gaps, parse failures, unexpected 5xx)
+
+### skipped-endpoints.json
+
+**Produced by:** `registry_filter.write_skipped_endpoints()`
+
+JSON array of expected platform/instance skips (JCDS on on-prem, probe 404s, optional endpoints). These types are **not** collected and do **not** appear in `logs/failures.json`.
 
 Legacy mirror: `gap-report.md` at output root.
 
@@ -135,7 +142,7 @@ Final line: `Export complete. exported=N errors=M output=...`
 
 **Produced by:** `failures.write_failure_report()`
 
-Structured JSON array:
+Structured JSON array of **unexpected** runtime errors only (v0.4.0+). Expected-unavailable endpoints are listed in `gaps/skipped-endpoints.json` instead.
 
 ```json
 [
@@ -156,13 +163,17 @@ Structured JSON array:
 
 ```mermaid
 flowchart TD
-  Collect["collect_object_type()"] --> Backup["write_backups()"]
+  Probe["probe-report.json"] --> Filter["filter_specs_for_run()"]
+  Filter --> SkippedJSON["gaps/skipped-endpoints.json"]
+  Filter --> Collect["collect_object_type()"]
+  Collect --> Backup["write_backups()"]
   Backup --> ManifestJSON["manifest.json row"]
   Collect --> Errors["all_errors list"]
   Errors --> GapsMD["gaps/manual-workarounds.md"]
   Errors --> FailJSON["logs/failures.json"]
   Errors --> RunMeta["run-metadata.json error_count"]
   Errors --> Priv["run-metadata.json missing_privileges_by_endpoint"]
+  SkippedJSON --> GapsMD
   Orch["orchestrator"] --> RunMeta
   Orch --> DRMan["dr-manifest.json"]
   Orch --> Compat["compatibility-spec.json"]
