@@ -1,78 +1,64 @@
-# Jamf Settings Analysis — Documentation Wiki
+# Jamf Dossier — Documentation
 
-Welcome to the project documentation. This wiki mirrors GitHub Wiki navigation using interlinked Markdown files in `docs/`.
+User documentation for the **Jamf Dossier** macOS application. This mirrors the [GitHub Wiki](https://github.com/roto31/jamf-dossier/wiki) navigation.
 
-## Start Here
-
-| Page | Description |
-|------|-------------|
-| [Project Overview](project-overview.md) | Purpose, problem solved, tech stack, repository layout |
-| [Architecture](architecture.md) | System design, data flow, Mermaid diagrams |
-| [Setup & Installation](setup-installation.md) | Prerequisites, venv, credentials, optional DR/SSH vars |
-| [Usage Guide](usage-guide.md) | End-to-end export walkthrough |
-| [Documentation coverage gaps](documentation-coverage-gaps.md) | Scripts, policies, smart groups, searches vs backup vs GitHub-readable docs |
-| [Troubleshooting](troubleshooting.md) | Verified fixes for common failures |
-
-## Scripts & Code
+## Start here
 
 | Page | Description |
 |------|-------------|
-| [run_full_export.py](scripts/run-full-export.md) | Primary CLI entrypoint |
-| [jamf_exporter Package](scripts/jamf-exporter-package.md) | All production Python modules |
-| [Auxiliary Scripts](scripts/auxiliary-scripts.md) | Index generation, wiki publish, parity compare, registry sync |
-| [probe.py](scripts/probe.md) | Read-only backup feasibility probe |
-| [Legacy Tools](scripts/legacy-tools.md) | `src/jamf_audit_exporter.py`, `src/jamf_restore.py` |
+| [Getting Started](getting-started.md) | Install DMG, first backup, Keychain setup |
+| [Operator Guide](jamf-dossier-operator-guide.md) | Settings, on-prem MySQL/Tomcat, DR tiers |
+| [Project Overview](project-overview.md) | Purpose, capabilities, tech stack |
+| [Architecture](architecture.md) | App design and data flow (Mermaid) |
+| [Setup](setup-installation.md) | System requirements and installation |
+| [Usage Guide](usage-guide.md) | End-to-end backup walkthrough |
+| [Troubleshooting](troubleshooting.md) | Common errors and fixes |
 
-## Output Artifacts
+## Backup output
 
 | Page | Description |
 |------|-------------|
-| [Output Directory Index](output/index.md) | Top-level `output/` layout |
-| [backup/](output/backup-directory.md) | Raw JSON/XML object exports |
-| [documentation/](output/documentation-directory.md) | Human-readable per-object docs |
-| [manifest/, gaps/, logs/](output/manifest-gaps-logs.md) | Inventory, gaps, run logs |
-| [DR Bundle Directories](output/dr-bundle-directories.md) | `binaries/`, `inventory/`, `server/`, `secrets/`, `captures/` |
+| [Output Directory Index](output/index.md) | Top-level backup folder layout |
+| [backup/](output/backup-directory.md) | Raw JSON/XML exports |
+| [documentation/](output/documentation-directory.md) | Markdown per-object docs |
+| [manifest/, gaps/, logs/](output/manifest-gaps-logs.md) | Inventory and run metadata |
+| [DR Bundle Directories](output/dr-bundle-directories.md) | inventory, binaries, server, secrets |
 
-## Disaster Recovery
+## Disaster recovery
 
 | Page | Description |
 |------|-------------|
 | [DR Overview](dr/README.md) | Bundle v2 layout and restore scope |
-| [Secrets Vault](dr/secrets-vault.md) | AES-256-GCM encrypted secrets store |
+| [Secrets Vault](dr/secrets-vault.md) | Encrypted secrets in backups |
 | [Cloud API Restore](dr/cloud-api-restore.md) | API-based restore path |
 | [On-Prem MySQL Restore](dr/on-prem-mysql-restore.md) | Database restore path |
-| [Device Re-Enrollment](dr/device-re-enrollment.md) | Post-restore device handling |
+| [Device Re-Enrollment](dr/device-re-enrollment.md) | Post-restore devices |
 
-## API & Manual Gaps
-
-| Page | Description |
-|------|-------------|
-| [API Endpoint Citations](api-endpoint-citations.md) | Static endpoint reference (also generated at export time) |
-| [Endpoint Verification](endpoint-verification.md) | Validation approach |
-| [Manual SSO Documentation](manual-sso.md) | SSO objects not fully API-exportable |
-| [Manual LDAP Documentation](manual-ldap.md) | LDAP manual capture steps |
-| [Manual Self Service Documentation](manual-self-service.md) | Self Service UI gaps |
-
-## Testing & Release
+## Export engine
 
 | Page | Description |
 |------|-------------|
-| [Export Parity Testing](testing/export-parity.md) | Python vs Swift fixture comparison |
-| [Release Versioning](release-versioning.md) | SemVer and data revision policy |
-| [CHANGELOG](../CHANGELOG.md) | Full version history from v0.1.0 through present |
-| [Jamf Backup Operator Guide](jamf-backup-operator-guide.md) | Native macOS app operations |
+| [Export Engine](export-engine.md) | How Jamf Dossier collects and writes backups |
+| [API Endpoint Citations](api-endpoint-citations.md) | Jamf API references per object type |
+| [Endpoint Verification](endpoint-verification.md) | Coverage validation approach |
 
-## Related Subprojects
-
-| Page | Description |
-|------|-------------|
-| [jamf_mcp](../jamf_mcp/docs/INSTALLATION.md) | MCP server for Jamf API tooling |
-| [JamfBackup (Swift)](../JamfBackup/README.md) | Native SwiftUI backup client |
-| [release_mcp](../release_mcp/docs/TOOLS.md) | Release automation MCP server |
-
-## Site Backups
+## Manual capture (API gaps)
 
 | Page | Description |
 |------|-------------|
-| [Lotus Home Academy Wiki](lotus-home-academy/README.md) | Full backup catalog for Lotus Home Academy Jamf Pro |
-| [Lotus backup folder](../Lotus-Home-Academy-Backup/README.md) | Raw backup artifacts in the repository |
+| [Manual SSO](manual-sso.md) | SSO settings not fully API-exportable |
+| [Manual LDAP](manual-ldap.md) | LDAP manual capture |
+| [Manual Self Service](manual-self-service.md) | Self Service UI gaps |
+
+## Legal
+
+| Page | Description |
+|------|-------------|
+| [Proprietary Notice](legal/proprietary-notice.md) | License and distribution terms |
+
+## Releases
+
+| Resource | Link |
+|----------|------|
+| Changelog | [CHANGELOG.md](../CHANGELOG.md) |
+| Release artifacts | [release/README.md](../release/README.md) |
