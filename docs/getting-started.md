@@ -1,6 +1,17 @@
 # Getting Started
 
-Install **Jamf Dossier** and run your first Jamf Pro configuration backup.
+User documentation for the **Jamf Dossier** macOS application.
+
+## Quick path
+
+```mermaid
+flowchart LR
+  Install["Install DMG"] --> Settings["Settings + Keychain"]
+  Settings --> Folder["Choose folder"]
+  Folder --> Run["Run Backup"]
+  Run --> Review["Review gaps/ + manifest/"]
+  Review --> Optional["Enable DR tiers if needed"]
+```
 
 ## 1. Install the app
 
@@ -51,9 +62,12 @@ Open **DR Coverage** to see which disaster-recovery tiers apply to your deployme
 | Path in backup folder | What to check |
 |----------------------|---------------|
 | `manifest/run-metadata.json` | Object counts, errors, missing privileges |
-| `gaps/manual-workarounds.md` | API gaps and runtime errors |
+| `manifest/dr-manifest.json` | DR bundle metadata (every run) |
+| `gaps/skipped-endpoints.json` | Expected-unavailable endpoints (not failures) |
+| `gaps/manual-workarounds.md` | API gaps, Expected Unavailable, runtime errors |
 | `documentation/` | Human-readable per-object docs |
 | `backup/` | Raw XML/JSON for diff and restore planning |
+| `logs/failures.json` | Actionable failures only |
 | `logs/export.log` | Detailed run log |
 
 ## On-premises extras

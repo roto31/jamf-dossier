@@ -1,26 +1,21 @@
-# Jamf API Endpoint Citations
+# API Endpoint Citations
 
-This project verifies API usage against Jamf's official documentation and tenant-local API docs.
+Jamf Dossier ships a bundled endpoint registry (`endpoint_registry.json`, 41 types). Each backup run also writes:
 
-## Official Documentation Sources
+```
+documentation/api-endpoint-citations.md
+```
 
-- [Jamf Pro API Overview](https://developer.jamf.com/jamf-pro/docs/jamf-pro-api-overview)
-- [Classic API Overview](https://developer.jamf.com/jamf-pro/docs/getting-started-2)
-- [Jamf Pro API Developer Resources](https://developer.jamf.com/jamf-pro/docs/jamf-pro-api-developer-resources)
-- [Classic API Authentication Changes](https://developer.jamf.com/jamf-pro/docs/classic-api-authentication-changes)
-- Tenant-local Swagger/OpenAPI: `https://YOUR_JAMF_URL/api/doc`
+That file lists, per object type:
 
-## Authentication Endpoints
+- API family (Classic vs Jamf Pro API)
+- List and detail endpoint paths
+- Official Jamf documentation reference URLs
 
-- `POST /api/v1/oauth/token` (OAuth2 client credentials): https://developer.jamf.com/jamf-pro/reference/postoauthtoken
-- `POST /api/v1/auth/token` (basic-to-bearer token): https://developer.jamf.com/jamf-pro/reference/post_v1-auth-token
+Use it to validate RBAC requirements and Jamf version compatibility when troubleshooting 401/404 responses.
 
-## Export Endpoint Mapping
+## Related
 
-The authoritative endpoint map used by code is in `jamf_exporter/endpoint_registry.py`, with one entry per object type including:
-
-- API family
-- list/detail paths
-- method
-- reference URL
-- verification status
+- [Export Engine](export-engine.md)
+- [Endpoint Verification](endpoint-verification.md)
+- [Troubleshooting](troubleshooting.md)

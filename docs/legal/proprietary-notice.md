@@ -1,7 +1,18 @@
-# Proprietary notice
+# Proprietary Notice
 
-Jamf Backup application source code is proprietary and not published in the public documentation repository.
+**Jamf Dossier** and its export engine are proprietary software.
 
-Install only from official signed releases. Redistribution of binaries or reverse-engineering for competing products is not permitted without written consent.
+## Distribution
 
-Jamf and Jamf Pro are trademarks of Jamf Software, LLC.
+- Release binaries are distributed via [GitHub Releases](https://github.com/roto31/jamf-dossier/releases)
+- Source code for the export engine is not published in this repository
+- Documentation in this repository describes operator-facing behavior only
+
+## License
+
+Use subject to the license terms packaged with the release DMG and release notes. Do not redistribute signed builds outside your organization unless permitted by your license agreement.
+
+## Related
+
+- [CHANGELOG](../CHANGELOG.md)
+- [GitHub Releases](https://github.com/roto31/jamf-dossier/releases)

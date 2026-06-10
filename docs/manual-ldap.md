@@ -1,13 +1,15 @@
 # Manual LDAP Documentation
 
-Use this worksheet for details not returned by API.
+LDAP server bindings may require manual verification beyond API export.
 
-- Server display name:
-- Hostname/FQDN:
-- Port:
-- SSL/TLS mode:
-- Bind account (redacted):
-- Search base:
-- User mappings:
-- Group mappings:
-- Authorization integration notes:
+## Manual capture
+
+1. Jamf Pro → **Settings → System Settings → LDAP Servers**
+2. Confirm exported `ldap_servers` objects in `backup/` match UI
+3. Document bind DN, search bases, and group mappings not returned by API
+4. Store sensitive bind passwords in operator vault — not in backup cleartext
+
+## Related
+
+- [backup/ directory](../output/backup-directory.md)
+- [Manual SSO](manual-sso.md)

@@ -28,6 +28,7 @@ Install signed builds from [GitHub Releases](https://github.com/roto31/jamf-doss
 - Mermaid dependency diagrams for policies and site-wide relationships.
 - Expected-unavailable endpoint filtering (JCDS on on-prem, instance 404s) — cleaner `failures.json` and `gaps/skipped-endpoints.json`.
 - `dr-manifest.json` on every export (metadata tier at minimum).
+- Consumer documentation pages (architecture, troubleshooting, output layout, DR stubs) synced to repo `docs/` and GitHub Wiki.
 - Clearer backup tier UI: config/documentation vs full DR bundle.
 - FileVault privilege guidance in DR Coverage.
 
