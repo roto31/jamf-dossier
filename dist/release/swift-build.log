@@ -1,9 +1,414 @@
 Building for production...
-[0/6] Write sources
-[0/6] Copying endpoint_registry.json
-[2/6] Write sources
-[3/6] Write swift-version--79AA4F9932D1E87A.txt
-[5/7] Compiling JamfBackupKit JamfConfiguration.swift
+[0/415] Copying PrivacyInfo.xcprivacy
+[0/415] Write sources
+[11/415] Copying endpoint_registry.json
+[20/415] Write sources
+[28/415] Compiling CNIOWindows shim.c
+[29/415] Compiling CNIOWindows WSAStartup.c
+[30/415] Compiling CNIOWASI CNIOWASI.c
+[31/415] Compiling _AtomicsShims.c
+[32/415] Compiling CNIOOpenBSD shim.c
+[33/415] Compiling CNIOPosix event_loop_id.c
+[34/415] Compiling CNIOLinux shim.c
+[35/415] Write swift-version--79AA4F9932D1E87A.txt
+[36/415] Compiling CNIOLinux liburing_shims.c
+[37/415] Compiling CNIOFreeBSD shim.c
+[39/417] Compiling _NIOBase64 Base64.swift
+[39/417] Compiling CNIODarwin shim.c
+[41/419] Compiling _NIODataStructures Heap.swift
+[42/420] Compiling InternalCollectionsUtilities Debugging.swift
+[43/421] Compiling Logging MultiplexLogHandler.swift
+[44/422] Compiling ContainersPreview OutputSpan+Extras.swift
+[44/422] Compiling c-nioatomics.c
+[46/423] Compiling Crypto AES-GCM.swift
+[47/423] Compiling DequeModule Deque+Codable.swift
+[47/423] Compiling CCryptoBoringSSLShims shims.c
+[48/423] Compiling c-atomics.c
+[49/423] Compiling fiat_p256_adx_sqr.S
+[50/423] Compiling fiat_p256_adx_mul.S
+[51/423] Compiling fiat_curve25519_adx_square.S
+[52/423] Compiling fiat_curve25519_adx_mul.S
+[53/423] Compiling md5-x86_64-linux.S
+[54/423] Compiling md5-x86_64-apple.S
+[55/424] Compiling md5-586-linux.S
+[56/424] Compiling md5-586-apple.S
+[57/424] Compiling err_data.cc
+[58/424] Compiling chacha20_poly1305_x86_64-linux.S
+[59/424] Compiling chacha20_poly1305_x86_64-apple.S
+[60/424] Compiling chacha20_poly1305_armv8-win.S
+[61/424] Compiling chacha20_poly1305_armv8-linux.S
+[62/424] Compiling chacha20_poly1305_armv8-apple.S
+[63/424] Compiling chacha-x86_64-linux.S
+[64/424] Compiling chacha-x86_64-apple.S
+[65/424] Compiling chacha-x86-linux.S
+[66/424] Compiling chacha-x86-apple.S
+[67/424] Compiling chacha-armv8-win.S
+[68/424] Compiling chacha-armv8-linux.S
+[69/424] Compiling chacha-armv8-apple.S
+[70/424] Compiling chacha-armv4-linux.S
+[71/424] Compiling aes128gcmsiv-x86_64-linux.S
+[72/424] Compiling aes128gcmsiv-x86_64-apple.S
+[73/424] Compiling x86_64-mont5-linux.S
+[74/424] Compiling x86_64-mont5-apple.S
+[75/424] Compiling x86_64-mont-linux.S
+[76/424] Compiling x86_64-mont-apple.S
+[77/424] Compiling x86-mont-linux.S
+[78/424] Compiling x86-mont-apple.S
+[79/424] Compiling vpaes-x86_64-linux.S
+[80/424] Compiling vpaes-x86_64-apple.S
+[81/424] Compiling vpaes-x86-linux.S
+[82/424] Compiling vpaes-x86-apple.S
+[83/424] Compiling vpaes-armv8-win.S
+[84/424] Compiling vpaes-armv8-linux.S
+[85/424] Compiling vpaes-armv8-apple.S
+[86/424] Compiling vpaes-armv7-linux.S
+[88/424] Compiling NIOConcurrencyHelpers NIOAtomic.swift
+[88/424] Compiling sha512-x86_64-linux.S
+[89/424] Compiling sha512-x86_64-apple.S
+[90/424] Compiling sha512-armv8-win.S
+[91/424] Compiling sha512-armv8-linux.S
+[92/424] Compiling sha512-armv4-linux.S
+[93/424] Compiling sha512-armv8-apple.S
+[94/424] Compiling sha512-586-linux.S
+[95/424] Compiling sha512-586-apple.S
+[96/424] Compiling sha256-x86_64-linux.S
+[97/424] Compiling sha256-x86_64-apple.S
+[98/424] Compiling sha256-armv8-win.S
+[99/424] Compiling sha256-armv8-linux.S
+[100/424] Compiling sha256-armv4-linux.S
+[101/424] Compiling sha256-armv8-apple.S
+[102/424] Compiling sha256-586-linux.S
+[103/424] Compiling sha256-586-apple.S
+[104/424] Compiling sha1-x86_64-linux.S
+[105/424] Compiling sha1-x86_64-apple.S
+[106/424] Compiling sha1-armv8-linux.S
+[107/424] Compiling sha1-armv8-win.S
+[108/424] Compiling sha1-armv4-large-linux.S
+[109/424] Compiling sha1-armv8-apple.S
+[110/424] Compiling sha1-586-linux.S
+[111/424] Compiling sha1-586-apple.S
+[112/424] Compiling rsaz-avx2-linux.S
+[113/424] Compiling rsaz-avx2-apple.S
+[114/424] Compiling rdrand-x86_64-linux.S
+[115/424] Compiling rdrand-x86_64-apple.S
+[116/424] Compiling p256_beeu-x86_64-asm-linux.S
+[117/424] Compiling p256_beeu-x86_64-asm-apple.S
+[118/424] Compiling p256_beeu-armv8-asm-win.S
+[119/424] Compiling p256_beeu-armv8-asm-linux.S
+[120/424] Compiling p256_beeu-armv8-asm-apple.S
+[121/424] Compiling p256-x86_64-asm-linux.S
+[122/424] Compiling p256-x86_64-asm-apple.S
+[123/424] Compiling p256-armv8-asm-win.S
+[124/424] Compiling p256-armv8-asm-linux.S
+[125/424] Compiling ghashv8-armv8-win.S
+[126/424] Compiling p256-armv8-asm-apple.S
+[127/424] Compiling ghashv8-armv8-linux.S
+[128/424] Compiling ghashv8-armv8-apple.S
+[129/424] Compiling ghashv8-armv7-linux.S
+[130/424] Compiling ghash-x86_64-linux.S
+[131/424] Compiling ghash-x86_64-apple.S
+[132/424] Compiling ghash-x86-linux.S
+[133/424] Compiling ghash-x86-apple.S
+[134/424] Compiling ghash-ssse3-x86_64-linux.S
+[135/424] Compiling ghash-ssse3-x86_64-apple.S
+[136/424] Compiling ghash-ssse3-x86-linux.S
+[137/424] Compiling ghash-ssse3-x86-apple.S
+[138/424] Compiling ghash-neon-armv8-win.S
+[139/424] Compiling ghash-neon-armv8-linux.S
+[140/424] Compiling ghash-neon-armv8-apple.S
+[141/424] Compiling ghash-armv4-linux.S
+[142/424] Compiling co-586-linux.S
+[143/424] Compiling co-586-apple.S
+[144/424] Compiling bsaes-armv7-linux.S
+[145/424] Compiling bn-armv8-win.S
+[146/424] Compiling bn-armv8-linux.S
+[147/424] Compiling bn-armv8-apple.S
+[148/424] Compiling bn-586-linux.S
+[149/424] Compiling armv8-mont-win.S
+[150/424] Compiling bn-586-apple.S
+[151/424] Compiling armv8-mont-linux.S
+[152/424] Compiling armv8-mont-apple.S
+[153/424] Compiling aesv8-gcm-armv8-win.S
+[154/424] Compiling armv4-mont-linux.S
+[155/424] Compiling aesv8-gcm-armv8-linux.S
+[156/424] Compiling aesv8-gcm-armv8-apple.S
+[157/424] Compiling aesv8-armv8-linux.S
+[158/424] Compiling aesv8-armv8-win.S
+[159/424] Compiling aesv8-armv7-linux.S
+[160/424] Compiling aesv8-armv8-apple.S
+[161/424] Compiling aesni-x86_64-apple.S
+[162/424] Compiling aesni-x86_64-linux.S
+[163/424] Compiling aesni-x86-apple.S
+[164/424] Compiling aesni-x86-linux.S
+[165/424] Compiling aesni-gcm-x86_64-linux.S
+[166/424] Compiling aesni-gcm-x86_64-apple.S
+[167/424] Compiling aes-gcm-avx512-x86_64-linux.S
+[168/424] Compiling aes-gcm-avx512-x86_64-apple.S
+[169/424] Compiling aes-gcm-avx2-x86_64-linux.S
+[170/424] Compiling aes-gcm-avx2-x86_64-apple.S
+[171/424] Compiling xwing.cc
+[172/424] Compiling x_x509a.cc
+[173/424] Compiling x_x509.cc
+[174/424] Compiling x_spki.cc
+[175/424] Compiling x_sig.cc
+[176/424] Compiling x_req.cc
+[178/424] Compiling SwiftASN1 ASN1.swift
+[178/424] Compiling x_name.cc
+[179/424] Compiling x_pubkey.cc
+[180/424] Compiling x_exten.cc
+[181/424] Compiling x_attrib.cc
+[182/424] Compiling x_crl.cc
+[183/424] Compiling x_all.cc
+[184/424] Compiling x509spki.cc
+[185/424] Compiling x_algor.cc
+[186/424] Compiling x509rset.cc
+[187/424] Compiling x509name.cc
+[188/424] Compiling x509cset.cc
+[189/424] Compiling x509_vpm.cc
+[190/424] Compiling x509_v3.cc
+[191/424] Compiling x509_vfy.cc
+[192/424] Compiling x509_txt.cc
+[193/424] Compiling x509_trs.cc
+[194/424] Compiling x509_set.cc
+[195/424] Compiling x509_req.cc
+[196/424] Compiling x509_obj.cc
+[197/424] Compiling x509_lu.cc
+[198/424] Compiling x509_ext.cc
+[199/424] Compiling x509_def.cc
+[200/424] Compiling x509_d2.cc
+[201/424] Compiling x509_cmp.cc
+[202/424] Compiling x509_att.cc
+[203/424] Compiling x509.cc
+[204/424] Compiling v3_utl.cc
+[205/424] Compiling v3_skey.cc
+[206/424] Compiling v3_purp.cc
+[207/424] Compiling v3_prn.cc
+[208/424] Compiling v3_pmaps.cc
+[209/424] Compiling v3_pcons.cc
+[210/424] Compiling v3_ocsp.cc
+[211/424] Compiling v3_ncons.cc
+[212/424] Compiling v3_lib.cc
+[213/424] Compiling v3_int.cc
+[214/424] Compiling v3_ia5.cc
+[215/424] Compiling v3_info.cc
+[216/424] Compiling v3_genn.cc
+[217/424] Compiling v3_extku.cc
+[218/424] Compiling v3_enum.cc
+[219/424] Compiling v3_crld.cc
+[220/424] Compiling v3_cpols.cc
+[221/424] Compiling v3_conf.cc
+[222/424] Compiling v3_bitst.cc
+[223/424] Compiling v3_bcons.cc
+[224/424] Compiling v3_alt.cc
+[225/424] Compiling v3_akeya.cc
+[226/424] Compiling v3_akey.cc
+[227/424] Compiling t_x509a.cc
+[228/424] Compiling t_req.cc
+[229/424] Compiling t_x509.cc
+[230/424] Compiling t_crl.cc
+[231/424] Compiling rsa_pss.cc
+[232/424] Compiling name_print.cc
+[233/424] Compiling policy.cc
+[234/424] Compiling i2d_pr.cc
+[235/424] Compiling by_file.cc
+[236/424] Compiling by_dir.cc
+[237/424] Compiling asn1_gen.cc
+[238/424] Compiling algorithm.cc
+[239/424] Compiling a_verify.cc
+[240/424] Compiling a_sign.cc
+[241/424] Compiling a_digest.cc
+[242/424] Compiling voprf.cc
+[243/424] Compiling trust_token.cc
+[244/424] Compiling thread_win.cc
+[245/424] Compiling thread_pthread.cc
+[246/424] Compiling pmbtoken.cc
+[247/424] Compiling thread_none.cc
+[248/424] Compiling thread.cc
+[249/424] Compiling stack.cc
+[250/424] Compiling slhdsa.cc
+[251/424] Compiling spake2plus.cc
+[252/424] Compiling siphash.cc
+[253/424] Compiling sha512.cc
+[254/424] Compiling sha256.cc
+[255/424] Compiling sha1.cc
+[256/424] Compiling rsa_print.cc
+[257/424] Compiling rsa_extra.cc
+[258/424] Compiling rsa_crypt.cc
+[259/424] Compiling refcount.cc
+[260/424] Compiling rc4.cc
+[261/424] Compiling rsa_asn1.cc
+[262/424] Compiling windows.cc
+[263/424] Compiling urandom.cc
+[264/424] Compiling trusty.cc
+[265/424] Compiling rand.cc
+[266/424] Compiling passive.cc
+[267/424] Compiling ios.cc
+[268/424] Compiling getentropy.cc
+[269/424] Compiling forkunsafe.cc
+[270/424] Compiling fork_detect.cc
+[271/424] Compiling deterministic.cc
+[272/424] Compiling poly1305_arm_asm.S
+[273/424] Compiling poly1305_vec.cc
+[274/424] Compiling pool.cc
+[275/424] Compiling poly1305_arm.cc
+[276/424] Compiling poly1305.cc
+[277/424] Compiling pkcs8_x509.cc
+[278/424] Compiling pkcs8.cc
+[279/424] Compiling p5_pbev2.cc
+[280/424] Compiling pkcs7.cc
+[281/424] Compiling pkcs7_x509.cc
+[282/424] Compiling pem_xaux.cc
+[283/424] Compiling pem_pkey.cc
+[284/424] Compiling pem_x509.cc
+[285/424] Compiling pem_pk8.cc
+[286/424] Compiling pem_oth.cc
+[287/424] Compiling pem_lib.cc
+[288/424] Compiling pem_info.cc
+[289/424] Compiling pem_all.cc
+[290/424] Compiling obj_xref.cc
+[291/424] Compiling obj.cc
+[292/424] Compiling mlkem.cc
+[293/424] Compiling mldsa.cc
+[294/424] Compiling mem.cc
+[295/424] Compiling md5.cc
+[296/424] Compiling md4.cc
+[297/424] Compiling lhash.cc
+[298/424] Compiling poly_rq_mul.S
+[299/424] Compiling hpke.cc
+[300/424] Compiling kyber.cc
+[301/424] Compiling fips_shared_support.cc
+[302/424] Compiling hrss.cc
+[303/424] Compiling fuzzer_mode.cc
+[304/424] Compiling ex_data.cc
+[305/424] Compiling sign.cc
+[306/424] Compiling print.cc
+[307/424] Compiling scrypt.cc
+[308/424] Compiling pbkdf.cc
+[309/424] Compiling p_x25519_asn1.cc
+[310/424] Compiling p_x25519.cc
+[311/424] Compiling p_rsa_asn1.cc
+[312/424] Compiling p_rsa.cc
+[313/424] Compiling p_hkdf.cc
+[314/424] Compiling p_ed25519_asn1.cc
+[315/424] Compiling p_ed25519.cc
+[316/424] Compiling p_ec_asn1.cc
+[317/424] Compiling p_ec.cc
+[318/424] Compiling p_dsa_asn1.cc
+[319/424] Compiling p_dh_asn1.cc
+[320/424] Compiling p_dh.cc
+[321/424] Compiling evp_ctx.cc
+[322/424] Compiling evp_asn1.cc
+[323/424] Compiling evp.cc
+[324/424] Compiling engine.cc
+[325/424] Compiling err.cc
+[326/424] Compiling ecdsa_p1363.cc
+[327/424] Compiling ecdsa_asn1.cc
+[328/424] Compiling ecdh.cc
+[329/424] Compiling ec_derive.cc
+[330/424] Compiling hash_to_curve.cc
+[331/424] Compiling dsa_asn1.cc
+[332/424] Compiling ec_asn1.cc
+[333/424] Compiling dsa.cc
+[334/424] Compiling digest_extra.cc
+[335/424] Compiling params.cc
+[336/424] Compiling dh_asn1.cc
+[337/424] Compiling des.cc
+[338/424] Compiling spake25519.cc
+[339/424] Compiling curve25519_64_adx.cc
+[340/424] Compiling x25519-asm-arm.S
+[341/424] Compiling crypto.cc
+[342/424] Compiling curve25519.cc
+[343/424] Compiling cpu_intel.cc
+[344/424] Compiling cpu_arm_linux.cc
+[345/424] Compiling cpu_arm_freebsd.cc
+[346/424] Compiling cpu_aarch64_win.cc
+[347/424] Compiling cpu_aarch64_sysreg.cc
+[348/424] Compiling cpu_aarch64_openbsd.cc
+[349/424] Compiling cpu_aarch64_linux.cc
+[350/424] Compiling cpu_aarch64_fuchsia.cc
+[351/424] Compiling cpu_aarch64_apple.cc
+[352/424] Compiling conf.cc
+[353/424] Compiling cms.cc
+[354/424] Compiling tls_cbc.cc
+[355/424] Compiling get_cipher.cc
+[356/424] Compiling e_tls.cc
+[357/424] Compiling e_rc4.cc
+[358/424] Compiling e_rc2.cc
+[359/424] Compiling e_null.cc
+[360/424] Compiling e_des.cc
+[361/424] Compiling e_chacha20poly1305.cc
+[362/424] Compiling e_aeseax.cc
+[363/424] Compiling e_aesgcmsiv.cc
+[364/424] Compiling derive_key.cc
+[365/424] Compiling e_aesctrhmac.cc
+[366/424] Compiling chacha.cc
+[367/424] Compiling unicode.cc
+[368/424] Compiling cbs.cc
+[369/424] Compiling cbb.cc
+[370/424] Compiling ber.cc
+[371/424] Compiling asn1_compat.cc
+[372/424] Compiling buf.cc
+[373/424] Compiling sqrt.cc
+[374/424] Compiling exponentiation.cc
+[375/424] Compiling div.cc
+[376/424] Compiling convert.cc
+[377/424] Compiling bn_asn1.cc
+[378/424] Compiling printf.cc
+[379/424] Compiling blake2.cc
+[380/424] Compiling pair.cc
+[381/424] Compiling hexdump.cc
+[382/424] Compiling file.cc
+[383/424] Compiling fd.cc
+[384/424] Compiling errno.cc
+[385/424] Compiling bio_mem.cc
+[386/424] Compiling base64.cc
+[387/424] Compiling bio.cc
+[388/424] Compiling tasn_typ.cc
+[389/424] Compiling tasn_utl.cc
+[390/424] Compiling bcm.cc
+[391/424] Compiling tasn_fre.cc
+[392/424] Compiling tasn_new.cc
+[393/424] Compiling posix_time.cc
+[394/424] Compiling tasn_enc.cc
+[395/424] Compiling tasn_dec.cc
+[396/424] Compiling f_string.cc
+[397/424] Compiling f_int.cc
+[398/424] Compiling asn_pack.cc
+[399/424] Compiling asn1_par.cc
+[400/424] Compiling asn1_lib.cc
+[401/424] Compiling a_utctm.cc
+[402/424] Compiling a_type.cc
+[403/424] Compiling a_time.cc
+[404/424] Compiling a_strnid.cc
+[405/424] Compiling a_octet.cc
+[406/424] Compiling a_strex.cc
+[407/424] Compiling a_object.cc
+[408/424] Compiling a_mbstr.cc
+[409/424] Compiling a_int.cc
+[410/424] Compiling a_i2d_fp.cc
+[411/424] Compiling a_d2i_fp.cc
+[412/424] Compiling a_dup.cc
+[413/424] Compiling a_gentm.cc
+[414/424] Compiling aes.cc
+[415/424] Compiling a_bool.cc
+[416/424] Compiling a_bitstr.cc
+[417/424] Compiling CCitadelBcrypt bcrypt.c
+[418/424] Compiling CCitadelBcrypt bcrypt-kdf.c
+[418/424] Write sources
+[421/424] Compiling CCitadelBcrypt blf.c
+[423/427] Compiling CryptoBoringWrapper BoringSSLAEAD.swift
+[424/428] Compiling Atomics OptionalRawRepresentable.swift
+[425/429] Compiling BigInt Addition.swift
+[426/429] Compiling _CryptoExtras AES_CBC.swift
+[427/429] Compiling NIOCore AddressedEnvelope.swift
+[428/432] Compiling NIOFoundationEssentialsCompat ByteBuffer-foundation.swift
+[429/432] Compiling NIOEmbedded AsyncTestingChannel.swift
+[430/432] Compiling NIOPosix BSDSocketAPICommon.swift
+[431/433] Compiling NIO Exports.swift
+[432/434] Compiling NIOFoundationCompat Exports.swift
+[433/435] Compiling NIOSSH ByteBuffer+SSH.swift
+[434/436] Compiling Citadel AES.swift
+[435/437] Compiling JamfBackupKit JamfConfiguration.swift
 /Users/runner/work/Jamf-Settings-Analysis/Jamf-Settings-Analysis/JamfBackup/Sources/JamfBackupKit/Jamf/JamfConnectionDiagnostics.swift:7:46: warning: left side of nil coalescing operator '??' has non-optional type 'String', so the right side is never used
  5 |     public static func describe(_ error: Error) -> String {
  6 |         if let auth = error as? AuthError {
@@ -19,7 +424,7 @@ Building for production...
    |             `- warning: result of 'try?' is unused
 18 |         } else {
 19 |             self.fileHandle = nil
-[6/8] Compiling JamfBackupApp AppSettings.swift
-[6/8] Write Objects.LinkFileList
-[7/8] Linking JamfBackup
-Build of product 'JamfBackup' complete! (23.78s)
+[436/438] Compiling JamfBackupApp AppSettings.swift
+[436/438] Write Objects.LinkFileList
+[437/438] Linking JamfBackup
+Build of product 'JamfBackup' complete! (171.24s)

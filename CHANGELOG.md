@@ -20,7 +20,27 @@ Install signed builds from [GitHub Releases](https://github.com/roto31/jamf-doss
 
 ---
 
-## [0.4.0] - 2026-06-08
+## [0.5.0] - 2026-06-09
+
+### Added
+
+- App Sandbox enabled for GitHub and Mac App Store distribution (same feature set, single binary).
+- In-process SSH/SFTP for on-prem DR tiers (database backup, Tomcat, package binaries) — no dependency on `/usr/bin/ssh`.
+- Branded application icon (`AppIcon.icns`).
+- Improved accessibility labels on backup flow, wizards, and coverage views.
+- Export progress indicator and clearer error alerts for partial failures.
+
+### Changed
+
+- Keychain service unified under app bundle identifier with migration from prior builds.
+- SSH host key policy matches OpenSSH `accept-new` (stored in Application Support).
+
+### Fixed
+
+- Settings credential save failures now surface to the user.
+- Duplicate Settings menu entry removed.
+
+---
 
 ### Added
 

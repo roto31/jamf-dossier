@@ -4,6 +4,10 @@
 <dict>
 	<key>files</key>
 	<dict>
+		<key>Resources/AppIcon.icns</key>
+		<data>
+		XU7Tq6m29Ygy9RslnlT2gYOHYa4=
+		</data>
 		<key>Resources/JamfBackup_JamfBackupKit.bundle/endpoint_registry.json</key>
 		<data>
 		0pjuZIDCHdszy7tZgHM603WNltM=
@@ -11,6 +15,13 @@
 	</dict>
 	<key>files2</key>
 	<dict>
+		<key>Resources/AppIcon.icns</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			zVnzbnNmylmaPOkw6VlOlo04CBIgcOyd+fKbXU4jPLs=
+			</data>
+		</dict>
 		<key>Resources/JamfBackup_JamfBackupKit.bundle/endpoint_registry.json</key>
 		<dict>
 			<key>hash2</key>
@@ -22,7 +33,7 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			1QtrLvtIr2c2pTj4CviiJjBC1Ts=
+			kjRGzffWAEoFbLTEbsMf4fQ5MFw=
 			</data>
 			<key>requirement</key>
 			<string>identifier entitlements and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = PM529U3B66</string>
