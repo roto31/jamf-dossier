@@ -20,7 +20,26 @@ Install signed builds from [GitHub Releases](https://github.com/roto31/jamf-doss
 
 ---
 
-## [0.5.0] - 2026-06-09
+## [0.5.3] - 2026-06-11
+
+### Added
+
+- Settings → **Packages on external storage** — skip SSH download of `.pkg` files when payloads live on SMB, cloud, or AWS share; package metadata still exported via Jamf API.
+
+### Fixed
+
+- Settings → Save Credentials no longer clears OAuth client secret or password when SecureFields are left empty (fixes intermittent backup authentication failures).
+- Package binary fetch skips cleanly for remote distribution points instead of reporting one error per package.
+
+---
+
+## [0.5.2] - 2026-06-09
+
+### Fixed
+
+- Release workflow no longer passes unsupported `--channel` flag.
+
+---
 
 ### Added
 
