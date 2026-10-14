@@ -4,7 +4,7 @@ All notable **Jamf Dossier** (macOS app) release changes are documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-Install signed builds from [GitHub Releases](https://github.com/roto31/jamf-dossier/releases). Application source is not published in this repository.
+Install signed builds from [GitHub Releases](https://github.com/roto31/jamf-dossier/releases). Jamf Dossier is released under the [MIT License](LICENSE); third-party components are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Documentation
 
@@ -17,6 +17,16 @@ Install signed builds from [GitHub Releases](https://github.com/roto31/jamf-doss
 ---
 
 ## [Unreleased]
+
+### Added
+
+- MIT [LICENSE](LICENSE) for Jamf Dossier, its documentation, and release metadata.
+- [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) listing the open-source components compiled into release builds (Citadel, BigInt, swift-nio, swift-nio-ssh, swift-crypto with vendored BoringSSL, swift-asn1, swift-log, swift-atomics, swift-collections, swift-system), with verbatim license and NOTICE texts in [`third_party_licenses/`](third_party_licenses/).
+
+### Changed
+
+- **Docs:** `docs/legal/proprietary-notice.md` renamed to [docs/legal/license-notice.md](docs/legal/license-notice.md) and rewritten for the MIT License, with a trademark and non-affiliation statement. Links in `README.md` and `docs/README.md` updated.
+- **Docs:** README "Proprietary software" section replaced by a "License" section; proprietary wording removed from this changelog header and [docs/export-engine.md](docs/export-engine.md).
 
 ---
 

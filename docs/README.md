@@ -54,7 +54,7 @@ User documentation for the **Jamf Dossier** macOS application. This mirrors the 
 
 | Page | Description |
 |------|-------------|
-| [Proprietary Notice](legal/proprietary-notice.md) | License and distribution terms |
+| [License Notice](legal/license-notice.md) | MIT License, third-party components, and trademarks |
 
 ## Releases
 

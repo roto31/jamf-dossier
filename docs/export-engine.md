@@ -1,6 +1,6 @@
 # Export Engine
 
-How **Jamf Dossier** collects Jamf Pro configuration and writes backup artifacts. The app embeds the same export logic as the proprietary `jamf_exporter` engine (not published in this repository).
+How **Jamf Dossier** collects Jamf Pro configuration and writes backup artifacts. The app embeds the same export logic as the `jamf_exporter` engine.
 
 ## Pipeline overview
 

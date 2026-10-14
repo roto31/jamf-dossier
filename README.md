@@ -71,12 +71,6 @@ Jamf Dossier uses the same Jamf Pro API auth as the Jamf API:
 
 Credentials are stored in the macOS Keychain, not in backup files.
 
-## Proprietary software
-
-Application source code is **not** published in this repository. This repo contains user documentation, release metadata, and signed release artifacts only.
-
-See [docs/legal/proprietary-notice.md](docs/legal/proprietary-notice.md).
-
 ## API references
 
 - [Jamf Pro API Overview](https://developer.jamf.com/jamf-pro/docs/jamf-pro-api-overview)
@@ -88,3 +82,7 @@ See [docs/legal/proprietary-notice.md](docs/legal/proprietary-notice.md).
 1. [Troubleshooting wiki](https://github.com/roto31/jamf-dossier/wiki/Troubleshooting)
 2. Review `gaps/manual-workarounds.md` in your backup folder
 3. Open a GitHub issue on this repository
+
+## License
+
+MIT License. Copyright (c) 2026 roto31. See [LICENSE](LICENSE). Third-party components: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Trademarks and non-affiliation: [docs/legal/license-notice.md](docs/legal/license-notice.md).
