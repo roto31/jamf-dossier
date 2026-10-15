@@ -25,8 +25,8 @@ Install signed builds from [GitHub Releases](https://github.com/roto31/jamf-doss
 
 ### Changed
 
-- **Docs:** `docs/legal/proprietary-notice.md` renamed to [docs/legal/license-notice.md](docs/legal/license-notice.md) and rewritten for the MIT License, with a trademark and non-affiliation statement. Links in `README.md` and `docs/README.md` updated.
-- **Docs:** README "Proprietary software" section replaced by a "License" section; proprietary wording removed from this changelog header and [docs/export-engine.md](docs/export-engine.md).
+- **Docs:** the former legal notice page is now [docs/legal/license-notice.md](docs/legal/license-notice.md), rewritten for the MIT License with a trademark and non-affiliation statement. Links in `README.md` and `docs/README.md` updated.
+- **Docs:** README licensing section replaced by a "License" section; closed-source wording removed from this changelog header and [docs/export-engine.md](docs/export-engine.md).
 
 ---
 
