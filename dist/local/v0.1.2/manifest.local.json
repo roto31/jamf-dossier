@@ -1,0 +1,9 @@
+{
+  "version": "0.1.2",
+  "git_sha": "69615b1",
+  "signed": false,
+  "notarized": false,
+  "spctl": "skipped",
+  "built_at": "2026-06-02T16:58:06Z",
+  "app_path": "/Users/roto1231/XCode Projects/Jamf-Settings-Analysis/dist/local/v0.1.2/Jamf Dossier.app"
+}

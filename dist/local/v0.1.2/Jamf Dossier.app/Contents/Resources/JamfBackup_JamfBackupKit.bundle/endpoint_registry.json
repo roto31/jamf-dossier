@@ -1,0 +1,321 @@
+{
+  "endpoints": [
+    {
+      "api_family": "classic_api",
+      "citation": "findpolicies",
+      "detail_path": "/JSSResource/policies/id/{id}",
+      "list_path": "/JSSResource/policies",
+      "method": "GET",
+      "notes": "",
+      "object_type": "policies",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/findpolicies",
+      "verified": true
+    },
+    {
+      "api_family": "classic_api",
+      "citation": "findcomputergroups",
+      "detail_path": "/JSSResource/computergroups/id/{id}",
+      "list_path": "/JSSResource/computergroups",
+      "method": "GET",
+      "notes": "",
+      "object_type": "computer_groups",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/findcomputergroups",
+      "verified": true
+    },
+    {
+      "api_family": "classic_api",
+      "citation": "findmobiledevicegroups",
+      "detail_path": "/JSSResource/mobiledevicegroups/id/{id}",
+      "list_path": "/JSSResource/mobiledevicegroups",
+      "method": "GET",
+      "notes": "",
+      "object_type": "mobile_device_groups",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/findmobiledevicegroups",
+      "verified": true
+    },
+    {
+      "api_family": "classic_api",
+      "citation": "findosxconfigurationprofiles",
+      "detail_path": "/JSSResource/osxconfigurationprofiles/id/{id}",
+      "list_path": "/JSSResource/osxconfigurationprofiles",
+      "method": "GET",
+      "notes": "",
+      "object_type": "computer_configuration_profiles",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/findosxconfigurationprofiles",
+      "verified": true
+    },
+    {
+      "api_family": "classic_api",
+      "citation": "findmobiledeviceconfigurationprofiles",
+      "detail_path": "/JSSResource/mobiledeviceconfigurationprofiles/id/{id}",
+      "list_path": "/JSSResource/mobiledeviceconfigurationprofiles",
+      "method": "GET",
+      "notes": "",
+      "object_type": "mobile_device_configuration_profiles",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/findmobiledeviceconfigurationprofiles",
+      "verified": true
+    },
+    {
+      "api_family": "classic_api",
+      "citation": "findmacapplications",
+      "detail_path": "/JSSResource/macapplications/id/{id}",
+      "list_path": "/JSSResource/macapplications",
+      "method": "GET",
+      "notes": "",
+      "object_type": "mac_app_store_apps",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/findmacapplications",
+      "verified": true
+    },
+    {
+      "api_family": "classic_api",
+      "citation": "findmobiledeviceapplications",
+      "detail_path": "/JSSResource/mobiledeviceapplications/id/{id}",
+      "list_path": "/JSSResource/mobiledeviceapplications",
+      "method": "GET",
+      "notes": "",
+      "object_type": "mobile_device_apps",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/findmobiledeviceapplications",
+      "verified": true
+    },
+    {
+      "api_family": "jamf_pro_api",
+      "citation": "get_v1-app-installers",
+      "detail_path": "/api/v1/app-installers/{id}",
+      "list_path": "/api/v1/app-installers",
+      "method": "GET",
+      "notes": "",
+      "object_type": "app_installers",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/get_v1-app-installers",
+      "verified": true
+    },
+    {
+      "api_family": "classic_api",
+      "citation": "findscripts",
+      "detail_path": "/JSSResource/scripts/id/{id}",
+      "list_path": "/JSSResource/scripts",
+      "method": "GET",
+      "notes": "",
+      "object_type": "scripts",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/findscripts",
+      "verified": true
+    },
+    {
+      "api_family": "classic_api",
+      "citation": "findpackages",
+      "detail_path": "/JSSResource/packages/id/{id}",
+      "list_path": "/JSSResource/packages",
+      "method": "GET",
+      "notes": "",
+      "object_type": "packages",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/findpackages",
+      "verified": true
+    },
+    {
+      "api_family": "classic_api",
+      "citation": "findcategories",
+      "detail_path": "/JSSResource/categories/id/{id}",
+      "list_path": "/JSSResource/categories",
+      "method": "GET",
+      "notes": "",
+      "object_type": "categories",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/findcategories",
+      "verified": true
+    },
+    {
+      "api_family": "classic_api",
+      "citation": "findcomputerextensionattributes",
+      "detail_path": "/JSSResource/computerextensionattributes/id/{id}",
+      "list_path": "/JSSResource/computerextensionattributes",
+      "method": "GET",
+      "notes": "",
+      "object_type": "computer_extension_attributes",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/findcomputerextensionattributes",
+      "verified": true
+    },
+    {
+      "api_family": "classic_api",
+      "citation": "findadvancedcomputersearches",
+      "detail_path": "/JSSResource/advancedcomputersearches/id/{id}",
+      "list_path": "/JSSResource/advancedcomputersearches",
+      "method": "GET",
+      "notes": "",
+      "object_type": "advanced_computer_searches",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/findadvancedcomputersearches",
+      "verified": true
+    },
+    {
+      "api_family": "classic_api",
+      "citation": "findadvancedmobiledevicesearches",
+      "detail_path": "/JSSResource/advancedmobiledevicesearches/id/{id}",
+      "list_path": "/JSSResource/advancedmobiledevicesearches",
+      "method": "GET",
+      "notes": "",
+      "object_type": "advanced_mobile_device_searches",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/findadvancedmobiledevicesearches",
+      "verified": true
+    },
+    {
+      "api_family": "jamf_pro_api",
+      "citation": "get_v2-computer-prestages",
+      "detail_path": "/api/v2/computer-prestages/{id}",
+      "list_path": "/api/v2/computer-prestages",
+      "method": "GET",
+      "notes": "",
+      "object_type": "computer_prestages",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/get_v2-computer-prestages",
+      "verified": true
+    },
+    {
+      "api_family": "jamf_pro_api",
+      "citation": "get_v2-mobile-device-prestages",
+      "detail_path": "/api/v2/mobile-device-prestages/{id}",
+      "list_path": "/api/v2/mobile-device-prestages",
+      "method": "GET",
+      "notes": "",
+      "object_type": "mobile_device_prestages",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/get_v2-mobile-device-prestages",
+      "verified": true
+    },
+    {
+      "api_family": "jamf_pro_api",
+      "citation": "get_v1-inventory-collection-settings",
+      "detail_path": null,
+      "list_path": "/api/v1/inventory-collection-settings",
+      "method": "GET",
+      "notes": "",
+      "object_type": "inventory_collection_settings",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/get_v1-inventory-collection-settings",
+      "verified": true
+    },
+    {
+      "api_family": "classic_api",
+      "citation": "findcheckinsettings",
+      "detail_path": null,
+      "list_path": "/JSSResource/checkin",
+      "method": "GET",
+      "notes": "",
+      "object_type": "check_in_settings",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/findcheckinsettings",
+      "verified": true
+    },
+    {
+      "api_family": "classic_api",
+      "citation": "findselfservicesettings",
+      "detail_path": null,
+      "list_path": "/JSSResource/selfservice",
+      "method": "GET",
+      "notes": "",
+      "object_type": "self_service_settings",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/findselfservicesettings",
+      "verified": true
+    },
+    {
+      "api_family": "classic_api",
+      "citation": "findnetworksegments",
+      "detail_path": "/JSSResource/networksegments/id/{id}",
+      "list_path": "/JSSResource/networksegments",
+      "method": "GET",
+      "notes": "",
+      "object_type": "network_segments",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/findnetworksegments",
+      "verified": true
+    },
+    {
+      "api_family": "classic_api",
+      "citation": "findbuildings",
+      "detail_path": "/JSSResource/buildings/id/{id}",
+      "list_path": "/JSSResource/buildings",
+      "method": "GET",
+      "notes": "",
+      "object_type": "buildings",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/findbuildings",
+      "verified": true
+    },
+    {
+      "api_family": "classic_api",
+      "citation": "finddepartments",
+      "detail_path": "/JSSResource/departments/id/{id}",
+      "list_path": "/JSSResource/departments",
+      "method": "GET",
+      "notes": "",
+      "object_type": "departments",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/finddepartments",
+      "verified": true
+    },
+    {
+      "api_family": "classic_api",
+      "citation": "findsites",
+      "detail_path": "/JSSResource/sites/id/{id}",
+      "list_path": "/JSSResource/sites",
+      "method": "GET",
+      "notes": "",
+      "object_type": "sites",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/findsites",
+      "verified": true
+    },
+    {
+      "api_family": "classic_api",
+      "citation": "findaccountsbyuserid",
+      "detail_path": "/JSSResource/accounts/userid/{id}",
+      "list_path": "/JSSResource/accounts/userid",
+      "method": "GET",
+      "notes": "",
+      "object_type": "jamf_pro_user_accounts",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/findaccountsbyuserid",
+      "verified": true
+    },
+    {
+      "api_family": "classic_api",
+      "citation": "findaccountsbygroupid",
+      "detail_path": "/JSSResource/accounts/groupid/{id}",
+      "list_path": "/JSSResource/accounts/groupid",
+      "method": "GET",
+      "notes": "",
+      "object_type": "jamf_pro_user_groups",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/findaccountsbygroupid",
+      "verified": true
+    },
+    {
+      "api_family": "jamf_pro_api",
+      "citation": "get_v1-webhooks",
+      "detail_path": "/api/v1/webhooks/{id}",
+      "list_path": "/api/v1/webhooks",
+      "method": "GET",
+      "notes": "",
+      "object_type": "webhooks",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/get_v1-webhooks",
+      "verified": true
+    },
+    {
+      "api_family": "classic_api",
+      "citation": "findldapservers",
+      "detail_path": "/JSSResource/ldapservers/id/{id}",
+      "list_path": "/JSSResource/ldapservers",
+      "method": "GET",
+      "notes": "",
+      "object_type": "ldap_servers",
+      "reference_url": "https://developer.jamf.com/jamf-pro/reference/findldapservers",
+      "verified": true
+    }
+  ],
+  "manual_gaps": [
+    {
+      "object_type": "sso_configuration",
+      "reason": "No single stable public endpoint consistently exports complete SSO provider configuration across Jamf Pro versions.",
+      "source": "https://developer.jamf.com/jamf-pro/docs/jamf-pro-api-developer-resources",
+      "workaround": "Document from Jamf Pro UI: Settings > System > Single Sign-On. Capture provider type, mapped attributes, failover behavior, and enablement state."
+    },
+    {
+      "object_type": "api_integrations_secrets",
+      "reason": "Webhook/API integration shared secrets are not retrievable in clear form for security.",
+      "source": "https://developer.jamf.com/jamf-pro/reference/get_v1-webhooks",
+      "workaround": "Record auth method and endpoint metadata only. Rotate and re-enter secret during restore."
+    }
+  ],
+  "official_sources": [
+    "https://developer.jamf.com/jamf-pro/docs/jamf-pro-api-overview",
+    "https://developer.jamf.com/jamf-pro/docs/getting-started-2",
+    "https://developer.jamf.com/jamf-pro/docs/jamf-pro-api-developer-resources",
+    "https://developer.jamf.com/jamf-pro/docs/classic-api-authentication-changes"
+  ]
+}
